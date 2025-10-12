@@ -43,7 +43,7 @@
             <t t-foreach="report_data" t-as="section">
               <!-- Group Header -->
               <tr style="background-color:#0d6efd; color: white; font-weight:bold;">
-                <td colspan="10" style="padding:6px 10px; color: white; white-space:nowrap;">
+                <td colspan="11" style="padding:6px 10px; color: white; white-space:nowrap;">
                   <span t-esc="section.get('group')"/>
                 </td>
               </tr>
