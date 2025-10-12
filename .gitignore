@@ -3,3 +3,10 @@ __pycache__
 .venv/
 venv/
 env/
+addons-extra/muk_web_appsbar/
+addons-extra/muk_web_chatter/
+addons-extra/muk_web_colors/
+addons-extra/muk_web_dialog/
+addons-extra/muk_web_group/
+addons-extra/muk_web_refresh/
+addons-extra/muk_web_theme/
