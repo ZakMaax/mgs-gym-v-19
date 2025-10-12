@@ -3,7 +3,7 @@
 
     <menuitem
         id="mgs_sale_report_wizard_menu"
-        name="Reporting Wizard"
+        name="Sales Report"
         parent="sale.menu_sale_report"
         sequence="4"
         action="action_mgs_sale_report_wizard"
