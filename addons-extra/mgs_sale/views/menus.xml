@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem
+        id="mgs_sale_report_wizard_menu"
+        name="Reporting Wizard"
+        parent="sale.menu_sale_report"
+        sequence="4"
+        action="action_mgs_sale_report_wizard"
+    />
+
+</odoo>
