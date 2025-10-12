@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_mgs_sale_report_wizard" model="ir.actions.act_window">
+        <field name="name">Sales Report</field>
+        <field name="res_model">mgs_sale.sale_report</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="mgs_sale_report_wizard_form_view" />
+        <field name="target">new</field>
+    </record>
+</odoo>
