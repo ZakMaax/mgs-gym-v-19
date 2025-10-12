@@ -128,6 +128,8 @@ class SaleReport(models.TransientModel):
                         "amount": line.price_subtotal,
                         "to_invoice_qty": line.qty_to_invoice,
                         "invoiced_qty": line.qty_invoiced,
+                        "cost": line.product_id.standard_price,
+                        "margin": getattr(line, "margin", 0.0),
                     }
                 )
 
