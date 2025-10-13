@@ -72,11 +72,10 @@ class SaleReport(models.TransientModel):
             "order_partner_id" if self.group_by == "customer" else "product_id"
         )
 
-        grouped_data = SaleOrderLine.read_group(
+        grouped_data = SaleOrderLine.formatted_read_group(
             domain,
-            fields=["price_subtotal:sum", group_field],
+            aggregates=["price_subtotal:sum"],
             groupby=[group_field],
-            lazy=False,
         )
 
         # --- 4️⃣ Process grouped data ---
@@ -91,10 +90,10 @@ class SaleReport(models.TransientModel):
                     else "Undefined Product"
                 )
             )
-            group_domain = group["__domain"]
+            group_domain = group.get("__extra_domain")
 
             # Search all order lines for this group
-            order_lines = SaleOrderLine.search(group_domain)
+            order_lines = SaleOrderLine.search(domain + group_domain)
 
             # Compute totals
             total_amount = sum(order_lines.mapped("price_subtotal"))
@@ -174,8 +173,7 @@ class SaleReport(models.TransientModel):
             "order_partner_id" if self.group_by == "customer" else "product_id"
         )
 
-        aggregate_fields = [
-            group_field,
+        aggregates = [
             "price_subtotal:sum",
             "product_uom_qty:sum",
             "qty_delivered:sum",
@@ -184,11 +182,10 @@ class SaleReport(models.TransientModel):
         ]
 
         # Perform the aggregation using read_group
-        grouped_data = SaleOrderLine.read_group(
+        grouped_data = SaleOrderLine.formatted_read_group(
             domain,
-            fields=aggregate_fields,
+            aggregates=aggregates,
             groupby=[group_field],
-            lazy=False,
         )
 
         # --- 4️⃣ Format Data for Report ---
@@ -203,11 +200,11 @@ class SaleReport(models.TransientModel):
                     # Renaming the group field for template consistency
                     "group_name": group_name,
                     # Direct sums from read_group
-                    "total_amount": group.get("price_subtotal", 0.0),
-                    "total_ordered_qty": group.get("product_uom_qty", 0.0),
-                    "total_delivered_qty": group.get("qty_delivered", 0.0),
-                    "total_to_invoice_qty": group.get("qty_to_invoice", 0.0),
-                    "total_invoiced_qty": group.get("qty_invoiced", 0.0),
+                    "total_amount": group.get("price_subtotal:sum", 0.0),
+                    "total_ordered_qty": group.get("product_uom_qty:sum", 0.0),
+                    "total_delivered_qty": group.get("qty_delivered:sum", 0.0),
+                    "total_to_invoice_qty": group.get("qty_to_invoice:sum", 0.0),
+                    "total_invoiced_qty": group.get("qty_invoiced:sum", 0.0),
                 }
             )
 
@@ -222,3 +219,29 @@ class SaleReport(models.TransientModel):
             return self.env.ref(
                 "mgs_sale.action_report_mgs_sale_summary"
             ).report_action(self)
+
+    # Generate excel report method
+
+    def action_generate_excel(self):
+        base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
+
+        params = {
+            "group_by": self.group_by,
+            "report_type": self.report_type,
+            "date_from": self.date_from,
+            "date_to": self.date_to,
+            "user_id": self.user_id.id if self.user_id else "",
+            "partner_id": self.partner_id.id if self.partner_id else "",
+            "company_id": self.company_id.id if self.company_id else "",
+            "team_id": self.team_id.id if self.team_id else "",
+            "product_id": self.product_id.id if self.product_id else "",
+            "categ_id": self.categ_id.id if self.categ_id else "",
+            "parent_categ_id": self.parent_categ_id.id if self.parent_categ_id else "",
+        }
+
+        query = "&".join([f"{k}={v}" for k, v in params.items() if v])
+        return {
+            "type": "ir.actions.act_url",
+            "url": f"{base_url}/sales_report/excel?{query}",
+            "target": "new",
+        }
