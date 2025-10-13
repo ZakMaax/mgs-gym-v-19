@@ -6,7 +6,7 @@
         <t t-call="web.external_layout">
             <t t-set="report_data" t-value="docs[0].get_summary_sales_data()"/>
             <div class="page">
-                <h2 class="report-title">Sales Order Summary Report</h2>
+                <h2 class="report-title"><t t-esc="docs[0].group_by.title()"/> Sales Summary Report</h2>
                <p class="fw-bold">
                     From (<t t-esc="docs[0].date_from"/>) - To (<t t-esc="docs[0].date_to"/>)
                 </p>
