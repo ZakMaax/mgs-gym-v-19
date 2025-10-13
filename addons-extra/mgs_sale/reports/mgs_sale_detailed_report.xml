@@ -42,7 +42,7 @@
               <!-- Group Header -->
               <tr style="background-color:#0d6efd; color: white; font-weight:bold;">
                 <td colspan="11" style="padding:6px 10px; color: white; white-space:nowrap; text-transform: uppercase;">
-                  <t t-esc="docs[0].group_by == 'customer' and 'Customer' or 'Product'"/>: 
+                  <t t-esc="docs[0].group_by == 'customer' and 'Customer' or 'Item'"/>: 
                   <span t-esc="section.get('group')"/>
                 </td>
               </tr>
