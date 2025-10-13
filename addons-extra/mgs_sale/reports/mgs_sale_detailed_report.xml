@@ -7,7 +7,7 @@
       <t t-set="report_data" t-value="docs[0].get_detailed_sales_data()"/>
       <div class="page">
         <!-- Title -->
-        <h2 class="report-title">Detailed Sales Order Report</h2>
+        <h2 class="report-title">Detailed <t t-esc="docs[0].group_by.title()"/> Sales Report</h2>
         <p class="report-subtitle fw-bold">
           From (<t t-esc="docs[0].date_from"/>) - To (<t t-esc="docs[0].date_to"/>)
         </p>
@@ -41,7 +41,8 @@
             <t t-foreach="report_data" t-as="section">
               <!-- Group Header -->
               <tr style="background-color:#0d6efd; color: white; font-weight:bold;">
-                <td colspan="11" style="padding:6px 10px; color: white; white-space:nowrap;">
+                <td colspan="11" style="padding:6px 10px; color: white; white-space:nowrap; text-transform: uppercase;">
+                  <t t-esc="docs[0].group_by == 'customer' and 'Customer' or 'Product'"/>: 
                   <span t-esc="section.get('group')"/>
                 </td>
               </tr>
