@@ -99,7 +99,6 @@ class SaleReport(models.TransientModel):
             total_amount = sum(order_lines.mapped("price_subtotal"))
             total_ordered_qty = sum(order_lines.mapped("product_uom_qty"))
             total_delivered_qty = sum(order_lines.mapped("qty_delivered"))
-            total_to_invoice_qty = sum(order_lines.mapped("qty_to_invoice"))
             total_invoiced_qty = sum(order_lines.mapped("qty_invoiced"))
 
             # Structure section (include totals)
@@ -108,7 +107,6 @@ class SaleReport(models.TransientModel):
                 "total_amount": total_amount,
                 "total_ordered_qty": total_ordered_qty,
                 "total_delivered_qty": total_delivered_qty,
-                "total_to_invoice_qty": total_to_invoice_qty,
                 "total_invoiced_qty": total_invoiced_qty,
                 "orders": [],
             }
@@ -123,10 +121,9 @@ class SaleReport(models.TransientModel):
                         "product": line.product_id.display_name,
                         "ordered_qty": line.product_uom_qty,
                         "delivered_qty": line.qty_delivered,
+                        "invoiced_qty": line.qty_invoiced,
                         "rate": line.price_unit,
                         "amount": line.price_subtotal,
-                        "to_invoice_qty": line.qty_to_invoice,
-                        "invoiced_qty": line.qty_invoiced,
                         "cost": line.product_id.standard_price,
                         "margin": getattr(line, "margin", 0.0),
                     }
@@ -177,7 +174,6 @@ class SaleReport(models.TransientModel):
             "price_subtotal:sum",
             "product_uom_qty:sum",
             "qty_delivered:sum",
-            "qty_to_invoice:sum",
             "qty_invoiced:sum",
         ]
 
@@ -203,7 +199,6 @@ class SaleReport(models.TransientModel):
                     "total_amount": group.get("price_subtotal:sum", 0.0),
                     "total_ordered_qty": group.get("product_uom_qty:sum", 0.0),
                     "total_delivered_qty": group.get("qty_delivered:sum", 0.0),
-                    "total_to_invoice_qty": group.get("qty_to_invoice:sum", 0.0),
                     "total_invoiced_qty": group.get("qty_invoiced:sum", 0.0),
                 }
             )
