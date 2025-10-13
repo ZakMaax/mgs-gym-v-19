@@ -27,6 +27,7 @@
                     </group>
                     <footer>
                         <button class="btn btn-primary" string="Print" type="object" name="action_print_report" />
+                        <button class="btn btn-success" string="Print Excel" type="object" name="action_generate_excel" />
                         <button class="btn btn-danger" string="Cancel"  special="cancel" />
                     </footer>
                </sheet>
