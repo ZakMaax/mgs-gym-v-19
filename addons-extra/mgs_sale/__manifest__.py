@@ -18,6 +18,7 @@
         "security/ir.model.access.csv",
         "reports/mgs_sale_detailed_report.xml",
         "reports/mgs_sale_summary_report.xml",
+        "reports/paper_format.xml",
         "reports/report_actions.xml",
         "views/mgs_sale_report_views.xml",
         "views/actions.xml",
