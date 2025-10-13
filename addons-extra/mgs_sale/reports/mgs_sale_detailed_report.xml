@@ -31,7 +31,7 @@
             <th style="width:12%; padding:6px 10px; text-align:right;">Amount</th>
             <th style="width:8%; padding:6px 10px; text-align:right;">To Invoice Qty</th>
             <th style="width:8%; padding:6px 10px; text-align:right;">Invoiced Qty</th>
-            <t t-if="user.has_group('mgs_sale.account.group_account_invoice')">
+            <t t-if="user.has_group('account.group_account_invoice')">
                 <th style="width:8%; padding:6px 10px; text-align:right;">Cost</th>
                 <th style="width:8%; padding:6px 10px; text-align:right;">Margin</th>
             </t>
@@ -65,7 +65,7 @@
                   <td style="text-align:right; padding:6px 10px;" ><t t-esc="'{0:,.2f}'.format(line['amount'])"/></td>
                   <td style="text-align:right; padding:6px 10px;" ><t t-esc="'{0:,.2f}'.format(line['to_invoice_qty'])"/></td>
                   <td style="text-align:right; padding:6px 10px;" ><t t-esc="'{0:,.2f}'.format(line['invoiced_qty'])"/></td>
-                  <t t-if="user.has_group('mgs_sale.account.group_account_invoice')">
+                  <t t-if="user.has_group('account.group_account_invoice')">
                     <td style="text-align:right; padding:6px 10px;" ><t t-esc="'{0:,.2f}'.format(line['cost'])"/></td>
                     <td style="text-align:right; padding:6px 10px;" ><t t-esc="'{0:,.2f}'.format(line['margin'])"/></td>
                   </t>
