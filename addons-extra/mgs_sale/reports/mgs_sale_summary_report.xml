@@ -14,14 +14,14 @@
                 <table class="o_report_table" style="width:100%; border-collapse:collapse;">
                     <thead>
                         <tr class="thead" style="background-color: #0d6efd; color: white;">
-                            <th style="width:45%">
+                            <th style="width:40%">
                                 <!-- Use the wizard's grouping selection from the record -->
                                 <t t-esc="docs[0].group_by == 'customer' and 'Customer' or 'Product'"/>
                             </th>
-                            <th style="width:11%; text-align:right;">Ordered</th>
-                            <th style="width:11%; text-align:right;">Delivered</th>
-                            <th style="width:11%; text-align:right;">Invoiced</th>
-                            <th style="width:11%; text-align:right;">Amount</th>
+                            <th style="width:15%; text-align:right;">Ordered Qty</th>
+                            <th style="width:15%; text-align:right;">Delivered Qty</th>
+                            <th style="width:15%; text-align:right;">Invoiced Qty</th>
+                            <th style="width:15%; text-align:right;">Amount</th>
                         </tr>
                     </thead>
                     <tbody>
