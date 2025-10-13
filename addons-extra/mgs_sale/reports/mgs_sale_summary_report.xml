@@ -18,10 +18,10 @@
                                 <!-- Use the wizard's grouping selection from the record -->
                                 <t t-esc="docs[0].group_by == 'customer' and 'Customer' or 'Product'"/>
                             </th>
-                            <th style="width:15%; text-align:right;">Ordered Qty</th>
-                            <th style="width:15%; text-align:right;">Delivered Qty</th>
-                            <th style="width:15%; text-align:right;">Invoiced Qty</th>
-                            <th style="width:15%; text-align:right;">Amount</th>
+                            <th style="width:15%; text-align:right; padding-right: 3px">Ordered Qty</th>
+                            <th style="width:15%; text-align:right; padding-right: 3px">Delivered Qty</th>
+                            <th style="width:15%; text-align:right; padding-right: 3px">Invoiced Qty</th>
+                            <th style="width:15%; text-align:right; padding-right: 3px">Amount</th>
                         </tr>
                     </thead>
                     <tbody>
