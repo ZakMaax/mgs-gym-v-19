@@ -6,10 +6,9 @@
         <t t-call="web.external_layout">
             <t t-set="report_data" t-value="docs[0].get_summary_sales_data()"/>
             <div class="page">
-                <h2 class="report-title">Sales Summary Report</h2>
-               <p class="report-subtitle">
-                    From <t t-esc="docs[0].date_from"/> - To <t t-esc="docs[0].date_to"/>
-                    <t t-if="docs[0].company_id"> | <t t-esc="docs[0].company_id.name"/></t>
+                <h2 class="report-title">Sales Order Summary Report</h2>
+               <p class="fw-bold">
+                    From (<t t-esc="docs[0].date_from"/>) - To (<t t-esc="docs[0].date_to"/>)
                 </p>
 
                 <table class="o_report_table" style="width:100%; border-collapse:collapse;">
@@ -22,7 +21,6 @@
                             <th style="width:11%; text-align:right;">Ordered</th>
                             <th style="width:11%; text-align:right;">Delivered</th>
                             <th style="width:11%; text-align:right;">Invoiced</th>
-                            <th style="width:11%; text-align:right;">To Invoice</th>
                             <th style="width:11%; text-align:right;">Amount</th>
                         </tr>
                     </thead>
@@ -43,9 +41,6 @@
                                         <t t-esc="'{0:,.2f}'.format(line.get('total_invoiced_qty', 0))"/>
                                     </td>
                                     <td style="text-align:right; padding:6px 8px; border-bottom:1px solid #efefef;">
-                                        <t t-esc="'{0:,.2f}'.format(line.get('total_to_invoice_qty', 0))"/>
-                                    </td>
-                                    <td style="text-align:right; padding:6px 8px; border-bottom:1px solid #efefef;">
                                         <t t-esc="'{0:,.2f}'.format(line.get('total_amount', 0))"/>
                                     </td>
                                 </tr>
@@ -61,9 +56,6 @@
                                 </td>
                                 <td style="text-align:right; padding:10px;">
                                     <t t-esc="'{0:,.2f}'.format(sum([s.get('total_invoiced_qty', 0) for s in report_data]))"/>
-                                </td>
-                                <td style="text-align:right; padding:10px;">
-                                    <t t-esc="'{0:,.2f}'.format(sum([s.get('total_to_invoice_qty', 0) for s in report_data]))"/>
                                 </td>
                                 <td style="text-align:right; padding:10px;">
                                     <t t-esc="'{0:,.2f}'.format(sum([s.get('total_amount', 0) for s in report_data]))"/>
