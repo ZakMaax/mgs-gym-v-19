@@ -34,30 +34,24 @@ class SaleReport(models.TransientModel):
         required=True,
     )
 
-    def get_detailed_sales_data(self):
-        SaleOrderLine = self.env["sale.order.line"]
-        final_data = []
-
-        # --- 1️⃣ Validate date range ---
+    def _get_base_domain(self):
+        """Builds the common search domain for the Combined Report Model."""
         if self.date_from > self.date_to:
             raise UserError("The start date cannot be after the end date.")
 
-        # --- 2️⃣ Build domain ---
-
         domain = [
-            ("order_id.date_order", ">=", self.date_from),
-            ("order_id.date_order", "<=", self.date_to),
-            ("order_id.state", "in", ["sale", "done"]),
+            ("date_order", ">=", self.date_from),
+            ("date_order", "<=", self.date_to),
         ]
 
         if self.user_id:
-            domain.append(("order_id.user_id", "=", self.user_id.id))
+            domain.append(("user_id", "=", self.user_id.id))
         if self.company_id:
-            domain.append(("order_id.company_id", "=", self.company_id.id))
+            domain.append(("company_id", "=", self.company_id.id))
         if self.team_id:
-            domain.append(("order_id.team_id", "=", self.team_id.id))
+            domain.append(("team_id", "=", self.team_id.id))
         if self.partner_id:
-            domain.append(("order_id.partner_id", "=", self.partner_id.id))
+            domain.append(("partner_id", "=", self.partner_id.id))
         if self.product_id:
             domain.append(("product_id", "=", self.product_id.id))
         if self.categ_id:
@@ -67,12 +61,18 @@ class SaleReport(models.TransientModel):
                 ("product_id.categ_id.parent_id", "=", self.parent_categ_id.id)
             )
 
-        # --- 3️⃣ Define grouping ---
-        group_field = (
-            "order_partner_id" if self.group_by == "customer" else "product_id"
-        )
+        return domain
 
-        grouped_data = SaleOrderLine.read_group(
+    def get_detailed_sales_data(self):
+        CombinedReport = self.env["mgs_sale.combined_report"]
+        final_data = []
+
+        domain = self._get_base_domain()
+
+        # --- 3️⃣ Define grouping ---
+        group_field = "partner_id" if self.group_by == "customer" else "product_id"
+
+        grouped_data = CombinedReport.read_group(
             domain,
             fields=["price_subtotal:sum", group_field],
             groupby=[group_field],
@@ -91,10 +91,13 @@ class SaleReport(models.TransientModel):
                     else "Undefined Product"
                 )
             )
+
+            # --- 2️⃣ Build Domain (same as detailed report) ---
+
             group_domain = group["__domain"]
 
             # Search all order lines for this group
-            order_lines = SaleOrderLine.search(group_domain)
+            order_lines = CombinedReport.search(group_domain)
 
             # Compute totals
             total_amount = sum(order_lines.mapped("price_subtotal"))
@@ -113,19 +116,18 @@ class SaleReport(models.TransientModel):
             }
 
             for line in order_lines:
-                order = line.order_id
                 section["orders"].append(
                     {
-                        "order_date": order.date_order.date(),
-                        "order_name": order.name,
-                        "customer": order.partner_id.name,
+                        "order_date": line.date_order.date(),
+                        "order_name": line.order_ref or line.id,
+                        "customer": line.partner_id.name or ("N/A"),
                         "product": line.product_id.display_name,
                         "ordered_qty": line.product_uom_qty,
                         "delivered_qty": line.qty_delivered,
                         "invoiced_qty": line.qty_invoiced,
                         "rate": line.price_unit,
                         "amount": line.price_subtotal,
-                        "cost": line.product_id.standard_price,
+                        "cost": line.product_id.standard_price * line.product_uom_qty,
                         "margin": getattr(line, "margin", 0.0),
                     }
                 )
@@ -135,53 +137,25 @@ class SaleReport(models.TransientModel):
         return final_data
 
     def get_summary_sales_data(self):
-        SaleOrderLine = self.env["sale.order.line"]
-
-        # --- 1️⃣ Validation ---
-        if self.date_from > self.date_to:
-            raise UserError("The start date cannot be after the end date.")
+        CombinedReport = self.env["mgs_sale.combined_report"]
 
         # --- 2️⃣ Build Domain (same as detailed report) ---
-        domain = [
-            ("order_id.date_order", ">=", self.date_from),
-            ("order_id.date_order", "<=", self.date_to),
-            ("order_id.state", "in", ["sale", "done"]),
-        ]
 
-        # Apply filters (User, Company, Team, Partner, Product, Category)
-        if self.user_id:
-            domain.append(("order_id.user_id", "=", self.user_id.id))
-        if self.company_id:
-            domain.append(("order_id.company_id", "=", self.company_id.id))
-        if self.team_id:
-            domain.append(("order_id.team_id", "=", self.team_id.id))
-        if self.partner_id:
-            domain.append(("order_id.partner_id", "=", self.partner_id.id))
-        if self.product_id:
-            domain.append(("product_id", "=", self.product_id.id))
-        if self.categ_id:
-            domain.append(("product_id.categ_id", "=", self.categ_id.id))
-        if self.parent_categ_id:
-            domain.append(
-                ("product_id.categ_id.parent_id", "=", self.parent_categ_id.id)
-            )
+        domain = self._get_base_domain()
 
         # --- 3️⃣ Define Grouping and Aggregation Fields ---
-        group_field = (
-            "order_partner_id" if self.group_by == "customer" else "product_id"
-        )
+        group_field = "partner_id" if self.group_by == "customer" else "product_id"
 
         aggregate_fields = [
             group_field,
             "price_subtotal:sum",
             "product_uom_qty:sum",
             "qty_delivered:sum",
-            "qty_to_invoice:sum",
             "qty_invoiced:sum",
         ]
 
         # Perform the aggregation using read_group
-        grouped_data = SaleOrderLine.read_group(
+        grouped_data = CombinedReport.read_group(
             domain,
             fields=aggregate_fields,
             groupby=[group_field],
@@ -199,10 +173,10 @@ class SaleReport(models.TransientModel):
                     # Renaming the group field for template consistency
                     "group_name": group_name,
                     # Direct sums from read_group
-                    "total_amount": group.get("price_subtotal:sum", 0.0),
-                    "total_ordered_qty": group.get("product_uom_qty:sum", 0.0),
-                    "total_delivered_qty": group.get("qty_delivered:sum", 0.0),
-                    "total_invoiced_qty": group.get("qty_invoiced:sum", 0.0),
+                    "total_amount": group.get("price_subtotal", 0.0),
+                    "total_ordered_qty": group.get("product_uom_qty", 0.0),
+                    "total_delivered_qty": group.get("qty_delivered", 0.0),
+                    "total_invoiced_qty": group.get("qty_invoiced", 0.0),
                 }
             )
 
