@@ -15,7 +15,6 @@
     ],
     "license": "GPL-2",
     "data": [
-        "security/groups.xml",
         "security/ir.model.access.csv",
         "reports/mgs_sale_detailed_report.xml",
         "reports/mgs_sale_summary_report.xml",
