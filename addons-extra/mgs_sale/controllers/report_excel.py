@@ -221,7 +221,20 @@ class SalesReportExcelController(http.Controller):
         workbook.close()
         output.seek(0)
 
-        filename = f"Sales_{report_type.title()}_Report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx"
+        if date_from:
+            date_from_dt = datetime.strptime(date_from, "%Y-%m-%d")
+            date_from_str = date_from_dt.strftime("%Y_%b_%d")  # e.g., 2025_May_16
+        else:
+            date_from_str = "start"
+
+        if date_to:
+            date_to_dt = datetime.strptime(date_to, "%Y-%m-%d")
+            date_to_str = date_to_dt.strftime("%Y_%b_%d")  # e.g., 2025_May_16
+        else:
+            date_to_str = "end"
+
+        filename = f"{group_by.capitalize()}_sales_{report_type}_report_from_{date_from_str}_to_{date_to_str}.xlsx"  # type:ignore
+
         headers = [
             (
                 "Content-Type",
