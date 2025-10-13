@@ -6,6 +6,7 @@
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">mgs_sale.mgs_sale_detailed_report</field>
         <field name="report_file">mgs_sale.mgs_sale_detailed_report</field>
+        <field name="paperformat_id" ref="mgs_sale.mgs_paperformat_detailed_sales_reports" />
         <field name="binding_type">report</field>
     </record>
 
