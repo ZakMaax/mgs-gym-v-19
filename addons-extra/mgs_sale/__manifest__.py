@@ -8,6 +8,7 @@
         "base",
         "sale_management",
         "sale_margin",
+        "point_of_sale",
         "crm",
         "hr",
         "contacts",
