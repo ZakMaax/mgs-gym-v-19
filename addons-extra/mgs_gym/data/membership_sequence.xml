@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="gym_membership_name_sequence" model="ir.sequence">
+        <field name="name">GYM Membership Sequence</field>
+        <field name="code">mgs_gym.membership</field>
+        <field name="prefix">MEMB</field>
+        <field name="padding">4</field>
+    </record>
+</odoo>
