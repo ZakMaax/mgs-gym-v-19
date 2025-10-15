@@ -1,0 +1,87 @@
+<odoo>
+    <record id="view_gym_partner_tree" model="ir.ui.view">
+        <field name="name">res.partner.gym.tree</field>
+        <field name="model">res.partner</field>
+        <field name="priority">5</field>
+        <field name="arch" type="xml">
+            <list string="GYM Partners">
+                <field name="name"/>
+                <field name="phone"/>
+                <field name="is_gym_member"/>
+                <field name="gender"/>
+                <field name="branch_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_gym_partner_form" model="ir.ui.view">
+        <field name="name">gym.partner.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='vat']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='website']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='category_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='function']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+             <xpath expr="//field[@name='parent_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+             <xpath expr="//field[@name='function']" position="after">
+                <group string="GYM Info">
+                    <field name="is_gym_member"/>
+                    <field name="branch_id"/>
+                    <field name="gender"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_gym_partner_kanban" model="ir.ui.view">
+        <field name="name">res.partner.kanban.gym.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.res_partner_kanban_view"/>
+        <field name="arch" type="xml">
+           <xpath expr="//main" position="inside">
+                <div class="mt-2 d-flex flex-column align-items-start gap-1">
+
+                    <t t-if="record.is_gym_member.raw_value">
+                        <span class="badge text-bg-success px-2 py-1">Gym Member</span>
+                    </t>
+                    <t t-else="">
+                        <span class="badge text-bg-danger px-2 py-1">Not a Member</span>
+                    </t>
+
+                    <div t-if="record.gender.raw_value" class="d-flex align-items-center text-muted">
+                        <t t-if="record.gender.raw_value == 'male'">
+                            <i class="fa fa-male me-1 text-primary"/>
+                        </t>
+                        <t t-else="">
+                            <i class="fa fa-female me-1 text-pink"/>
+                        </t>
+                        <field name="gender"/>
+                    </div>
+
+                    <div t-if="record.branch_id.raw_value" class="d-flex align-items-center text-muted">
+                        <i class="fa fa-building-o me-1 text-secondary"/>
+                        <field name="branch_id"/>
+                    </div>
+                </div>
+            </xpath>
+            <xpath expr="//kanban" position="inside">
+                <field name="is_gym_member"/>
+                <field name="gender"/>
+                <field name="branch_id"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
+
+
