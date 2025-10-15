@@ -1,0 +1,41 @@
+<odoo>
+    <record id="view_mgs_gym_meal_plan_tree" model="ir.ui.view">
+        <field name="name">mgs_gym.meal_plan.tree</field>
+        <field name="model">mgs_gym.meal_plan</field>
+        <field name="arch" type="xml">
+            <list string="Meal Plans">
+                <field name="member_id"/>
+                <field name="coach_id"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_mgs_gym_meal_plan_form" model="ir.ui.view">
+        <field name="name">mgs_gym.meal_plan.form</field>
+        <field name="model">mgs_gym.meal_plan</field>
+        <field name="arch" type="xml">
+            <form string="Meal Plan">
+                <sheet>
+                   <group>     
+                        <group>
+                            <field name="member_id"/>
+                            <field name="coach_id"/>
+                        </group>
+                        <group>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                        </group>  
+                   </group>
+                    <notebook>
+                        <page name="plan_text" string="Plan Text">
+                            <field name="plan_text"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo>
