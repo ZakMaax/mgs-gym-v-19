@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="draft" model="mgs_gym.membership_state">
+        <field name="name">Draft</field>
+        <field name="sequence">1</field>
+    </record>
+     <record id="active" model="mgs_gym.membership_state">
+        <field name="name">Active</field>
+        <field name="sequence">2</field>
+    </record>
+    <record id="suspended" model="mgs_gym.membership_state">
+        <field name="name">Suspended</field>
+        <field name="sequence">3</field>
+    </record>
+     <record id="cancelled" model="mgs_gym.membership_state">
+        <field name="name">Cancelled</field>
+        <field name="sequence">4</field>
+    </record>
+</odoo>
