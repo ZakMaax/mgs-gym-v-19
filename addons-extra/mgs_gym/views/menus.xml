@@ -1,0 +1,75 @@
+<odoo>
+    <menuitem id="root_mgs_gym_menu" name="GYM" web_icon="mgs_gym,static/description/icon.jpg"/>
+    
+    <menuitem
+        id="gym_members_menu"
+        name="Members"
+        parent="root_mgs_gym_menu"
+        sequence="1"
+    />
+
+      <menuitem
+        id="gym_member_menu"
+        name="Members"
+        parent="gym_members_menu"
+        action="action_gym_partner"
+        sequence="1"
+    />
+
+     <menuitem
+        id="gym_membership_menu"
+        name="Membership"
+        parent="gym_members_menu"
+        action="action_gym_memebrship"
+        sequence="2"
+    />
+
+
+
+    <menuitem
+        id="gym_meal_plan_menu"
+        name="Meal Plans"
+        parent="root_mgs_gym_menu"
+        action="action_mgs_gym_meal_plan"
+        sequence="2"
+    />
+
+     <menuitem
+        id="gym_measurement_menu"
+        name="Measurements"
+        parent="root_mgs_gym_menu"
+        action="action_mgs_gym_measurement"
+        sequence="3"
+    />
+
+
+
+    <!-- configuration menu -->
+
+    <menuitem
+        id="mgs_gym_configuration_menu"
+        name="Configuration"
+        parent="root_mgs_gym_menu"
+        sequence="9"
+    />
+
+    <!-- Branch menu (inside configuration) -->
+
+    <menuitem
+        id="mgs_gym_branch_menu"
+        name="Branch"
+        parent="mgs_gym_configuration_menu"
+        sequence="1"
+        action="action_mgs_gym_branch"
+    />
+
+    <!-- Shift menu (inside configuration) -->
+    <menuitem
+        id="mgs_gym_shift_menu"
+        name="Shift"
+        parent="mgs_gym_configuration_menu"
+        sequence="2"
+        action="action_mgs_gym_shift"
+    />
+
+</odoo>
