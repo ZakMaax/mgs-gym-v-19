@@ -1,0 +1,72 @@
+<odoo>
+    <record id="view_mgs_gym_shift_tree" model="ir.ui.view">
+        <field name="name">mgs_gym.shift.tree</field>
+        <field name="model">mgs_gym.shift</field>
+        <field name="arch" type="xml">
+            <list string="Shifts">
+                <field name="name"/>
+                <field name="branch_id"/>
+                <field name="start_time" widget="float_time"/>
+                <field name="end_time" widget="float_time"/>
+                <field name="gender"/>
+                <field name="capacity"/>
+                <field name="service_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_mgs_gym_shift_form" model="ir.ui.view">
+        <field name="name">mgs_gym.shift.form</field>
+        <field name="model">mgs_gym.shift</field>
+        <field name="arch" type="xml">
+            <form string="Shift">
+                <sheet>
+                   <group>
+                     <group>
+                        <field name="name"/>
+                        <field name="branch_id"/>
+                        <field name="start_time" widget="float_time"/>
+                        <field name="end_time" widget="float_time"/>
+                    </group>
+                    <group>
+                        <field name="service_id"/>
+                        <field name="active"/>
+                        <field name="gender"/>
+                        <field name="capacity"/>
+                    </group>
+                   </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="mgs_gym_shift_search_view" model="ir.ui.view">
+        <field name="name">Gym Shift Search View</field>
+        <field name="model">mgs_gym.membership</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="partner_id"/>
+                
+                <filter string="Archived" 
+                        name="archived"
+                        domain="[('active', '=', False)]"
+                />
+
+                <filter string="Male"
+                        name="male"
+                        domain="[('gender', '=', 'male')]"
+                />
+
+                <filter string="Female" 
+                        name="female"
+                        domain="[('gender', '=', 'female')]"
+                />
+
+                <filter string="Branch" name="group_by_branch" context="{'group_by' : 'branch_id'}"/>
+                <filter string="Gender" name="group_by_shift" context="{'group_by' : 'gender'}"/>
+
+            </search>
+        </field>
+    </record>
+</odoo>
