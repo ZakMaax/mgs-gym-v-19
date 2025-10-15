@@ -1,0 +1,49 @@
+<odoo>
+    <record id="view_mgs_gym_measurement_tree" model="ir.ui.view">
+        <field name="name">mgs_gym.measurement.tree</field>
+        <field name="model">mgs_gym.measurement</field>
+        <field name="arch" type="xml">
+            <list string="Measurements">
+                <field name="member_id"/>
+                <field name="date"/>
+                <field name="weight"/>
+                <field name="height"/>
+                <field name="bmi"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_mgs_gym_measurement_form" model="ir.ui.view">
+        <field name="name">mgs_gym.measurement.form</field>
+        <field name="model">mgs_gym.measurement</field>
+        <field name="arch" type="xml">
+            <form string="Measurement">
+                <sheet>
+                  <group>
+                      <group>
+                        <field name="member_id"/>
+                        <field name="date"/>
+                    </group>
+                    <group>
+                        <field name="weight"/>
+                        <field name="height"/>
+                        <field name="bmi" readonly="1"/>
+                        <group string="Optional Info">
+                            <field name="body_fat_percentage"/>
+                            <field name="muscle_mass"/>
+                        </group>
+                    </group>
+                  
+                  </group>
+                    <notebook>
+                        <page name="note" string="Notes">
+                            <field name="note"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+</odoo>
