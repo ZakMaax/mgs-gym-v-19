@@ -26,38 +26,38 @@ class GymDashboardController(http.Controller):
             [
                 ("next_invoice_date", ">=", today),
                 ("next_invoice_date", "<=", in_seven),
-                ("state", "!=", "expired"),
+                ("state", "=", "Active"),
             ]
         )
 
         # Grouping charts
         # By branch
         branches = Membership.formatted_read_group(
-            [], ["id_count:count(id)"], ["branch_id"]
+            [], aggregates=["id:count"], groupby=["branch_id"]
         )
         branch_labels = [
             item.get("branch_id") and item.get("branch_id")[1] or "Unassigned"
             for item in branches
         ]
-        branch_data = [item.get("id_count") for item in branches]
+        branch_data = [item.get("id:count") for item in branches]
 
         # By gender
         genders = Membership.formatted_read_group(
-            [], ["id_count:count(id)"], ["gender"]
+            [], aggregates=["id:count"], groupby=["gender"]
         )
         gender_labels = [item.get("gender") or "Unknown" for item in genders]
-        gender_data = [item.get("id_count") for item in genders]
+        gender_data = [item.get("id:count") for item in genders]
 
         # By recurrence unit
         recs = Membership.formatted_read_group(
-            [], ["id_count:count(id)"], ["recurrence_unit"]
+            [], aggregates=["id:count"], groupby=["recurrence_unit"]
         )
         rec_labels = [item.get("recurrence_unit") or "Unknown" for item in recs]
-        rec_data = [item.get("id_count") for item in recs]
+        rec_data = [item.get("id:count") for item in recs]
 
         # Memberships over time (created by month)
         timeline = Membership.formatted_read_group(
-            [], ["id_count:count(id)"], ["create_date:month"]
+            [], aggregates=["id:count"], groupby=["create_date:month"]
         )
         line_labels = []
         line_data = []
@@ -69,14 +69,14 @@ class GymDashboardController(http.Controller):
             else:
                 label = str(raw)
             line_labels.append(label)
-            line_data.append(item.get("id_count"))
+            line_data.append(item.get("id:count"))
 
         # Money received per month (posted customer invoices)
         Invoice = request.env["account.move"].sudo()
         invoices_timeline = Invoice.formatted_read_group(
             [("move_type", "=", "out_invoice"), ("state", "=", "posted")],
-            ["amount_total:sum(amount_total)"],
-            ["invoice_date:month"],
+            aggregates=["amount_total:sum"],
+            groupby=["invoice_date:month"],
         )
         money_labels = []
         money_data = []
@@ -88,7 +88,7 @@ class GymDashboardController(http.Controller):
                 mlabel = str(raw)
             money_labels.append(mlabel)
             # sum field name is 'amount_total'
-            money_data.append(float(item.get("amount_total") or 0.0))
+            money_data.append(float(item.get("amount_total:sum") or 0.0))
 
         data = {
             "active": active_count,
