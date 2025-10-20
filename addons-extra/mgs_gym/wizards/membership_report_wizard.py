@@ -38,13 +38,13 @@ class GymMembership(models.Model):
         domain = [("state", "!=", "Draft")]
 
         if self.branch_id:
-            domain.append(("branch_id", "=", self.branch_id))
+            domain.append(("branch_id", "=", self.branch_id.id))
 
         if self.shift_id:
-            domain.append(("shift_id", "=", self.shift_id))
+            domain.append(("shift_id", "=", self.shift_id.id))
 
         if self.state_id:
-            domain.append(("state_id", "=", self.state_id))
+            domain.append(("state_id", "=", self.state_id.id))
 
         if self.gender:
             domain.append(("gender", "=", self.gender))
@@ -169,14 +169,30 @@ class GymMembership(models.Model):
             sheet.write_number(row, col, rec.amount or 0.0, num_fmt)
             total_amount += rec.amount or 0.0
             col += 1
-            sheet.write_number(row, col, rec.discounted_amount or 0.0, num_fmt)
-            total_discounted += rec.discounted_amount or 0.0
+
+            amount_val = float(rec.amount or 0.0)
+
+            # --- START FIX: Correctly determine discounted_val (collected revenue) ---
+            if rec.discount_percent and rec.discount_percent > 0.0:
+                # Calculate discounted price
+                discounted_val = round(
+                    amount_val - (amount_val * rec.discount_percent / 100.0), 2
+                )
+            else:
+                # If no discount, the collected amount is the full original amount
+                discounted_val = amount_val
+            # --- END FIX ---
+
+            sheet.write_number(row, col, discounted_val or 0.0, num_fmt)
+            total_discounted += discounted_val or 0.0
             col += 1
-            # refunded amount: use refund_due if refunded (or show refund_due regardless)
+
+            # refunded amount: use refund_due
             refunded_val = rec.refund_due or 0.0
             sheet.write_number(row, col, refunded_val, num_fmt)
             total_refunded += refunded_val
             col += 1
+
             # next_invoice_date
             if rec.next_invoice_date:
                 sheet.write(row, col, rec.next_invoice_date, date_fmt)
@@ -185,42 +201,55 @@ class GymMembership(models.Model):
 
             row += 1
 
-        # Totals row
-        sheet.write(row, 0, "Grand Total", header_fmt)
-        # leave some merged cells or just write totals in numeric columns
-        sheet.write_blank(row, 1, None, header_fmt)
-        sheet.write_blank(row, 2, None, header_fmt)
-        sheet.write_blank(row, 3, None, header_fmt)
-        sheet.write_blank(row, 4, None, header_fmt)
-        sheet.write_blank(row, 5, None, header_fmt)
-        sheet.write_blank(row, 6, None, header_fmt)
+        # Totals row (Grand Total for Amount, Discounted Amount, and Refunded Amount)
+        total_fmt = workbook.add_format(
+            {"bold": True, "border": 1, "bg_color": "#d9e3f1"}
+        )
+
+        # Merge cells A to G for "Grand Total" label
+        sheet.merge_range(row, 0, row, 6, "Grand Total", total_fmt)
+
+        # Write totals
         sheet.write_number(row, 7, total_amount, num_fmt)
         sheet.write_number(row, 8, total_discounted, num_fmt)
         sheet.write_number(row, 9, total_refunded, num_fmt)
 
-        # Net profit row (after discounts and refunds)
-        net_profit = (
-            (total_amount or 0.0) - (total_discounted or 0.0) - (total_refunded or 0.0)
-        )
+        # Write blank formatted cell for the last column
+        sheet.write_blank(row, 10, None, num_fmt)
+
+        # Net profit row: revenue after discounts minus refunds.
+        net_profit = (total_discounted or 0.0) - (total_refunded or 0.0)
+
         profit_fmt = workbook.add_format(
             {
                 "bold": True,
                 "border": 1,
                 "num_format": "#,##0.00",
-                "font_color": "#0b8457",
+                "font_color": "#0b8457",  # Dark Green
+                "bg_color": "#e2f0d9",  # Light Green Background
                 "align": "right",
             }
         )
+
         profit_row = row + 1
-        sheet.write(profit_row, 0, "Net Profit", header_fmt)
-        # blank intermediate cells to align the net value under Amount column
-        sheet.write_blank(profit_row, 1, None, header_fmt)
-        sheet.write_blank(profit_row, 2, None, header_fmt)
-        sheet.write_blank(profit_row, 3, None, header_fmt)
-        sheet.write_blank(profit_row, 4, None, header_fmt)
-        sheet.write_blank(profit_row, 5, None, header_fmt)
-        sheet.write_blank(profit_row, 6, None, header_fmt)
+
+        # Merge cells A to G (0 to 6) for the "Net Profit" label
+        sheet.merge_range(
+            profit_row,
+            0,
+            profit_row,
+            6,
+            "Net Profit (Collected Revenue - Refunds)",
+            profit_fmt,
+        )
+
+        # Write the Net Profit value under the "Amount" column (Index 7)
         sheet.write_number(profit_row, 7, net_profit, profit_fmt)
+
+        # Write blank formatted cells for the remaining columns (Index 8, 9, 10)
+        sheet.write_blank(profit_row, 8, None, profit_fmt)
+        sheet.write_blank(profit_row, 9, None, profit_fmt)
+        sheet.write_blank(profit_row, 10, None, profit_fmt)
 
         workbook.close()
         out = base64.b64encode(fp.getvalue())
