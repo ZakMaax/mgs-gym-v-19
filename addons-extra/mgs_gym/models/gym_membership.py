@@ -21,9 +21,7 @@ class GymMembership(models.Model):
         domain=[("is_gym_member", "=", True)],
     )
     branch_id = fields.Many2one(
-        "mgs_gym.branch",
-        string="Branch",
-        tracking=True,
+        related="partner_id.branch_id", string="Branch", store=True, readonly=True
     )
     active = fields.Boolean(default=True)
     gender = fields.Selection(related="partner_id.gender", store=True, readonly=True)
@@ -38,7 +36,6 @@ class GymMembership(models.Model):
     class_id = fields.Many2one(
         "mgs_gym.class",
         string="Class",
-        required=True,
         tracking=True,
         domain="[('shift_id', '=', shift_id)]",
     )
