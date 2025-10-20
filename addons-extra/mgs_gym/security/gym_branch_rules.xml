@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <!-- ========== MEMBERSHIP ========== -->
+    <record id="gym_membership_branch_rule_user" model="ir.rule">
+        <field name="name">Gym Membership Branch Rule (User)</field>
+        <field name="model_id" ref="mgs_gym.model_mgs_gym_membership"/>
+        <field name="domain_force">[('shift_id.branch_id', 'in', user.branch_ids.ids)]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="global" eval="False"/>
+    </record>
+
+    <record id="gym_membership_branch_rule_admin" model="ir.rule">
+        <field name="name">Gym Membership Branch Rule (Admin)</field>
+        <field name="model_id" ref="mgs_gym.model_mgs_gym_membership"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+        <field name="global" eval="False"/>
+    </record>
+
+
+    <!-- ========== MEAL PLAN ========== -->
+    <record id="gym_meal_plan_branch_rule_user" model="ir.rule">
+        <field name="name">Gym Meal Plan Branch Rule (User)</field>
+        <field name="model_id" ref="mgs_gym.model_mgs_gym_meal_plan"/>
+        <field name="domain_force">[('partner_id.branch_id', 'in', user.branch_ids.ids)]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="global" eval="False"/>
+    </record>
+
+    <record id="gym_meal_plan_branch_rule_admin" model="ir.rule">
+        <field name="name">Gym Meal Plan Branch Rule (Admin)</field>
+        <field name="model_id" ref="mgs_gym.model_mgs_gym_meal_plan"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+        <field name="global" eval="False"/>
+    </record>
+
+
+    <!-- ========== MEASUREMENT ========== -->
+    <record id="gym_measurement_branch_rule_user" model="ir.rule">
+        <field name="name">Gym Measurement Branch Rule (User)</field>
+        <field name="model_id" ref="mgs_gym.model_mgs_gym_measurement"/>
+        <field name="domain_force">[('partner_id.branch_id', 'in', user.branch_ids.ids)]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="global" eval="False"/>
+    </record>
+
+    <record id="gym_measurement_branch_rule_admin" model="ir.rule">
+        <field name="name">Gym Measurement Branch Rule (Admin)</field>
+        <field name="model_id" ref="mgs_gym.model_mgs_gym_measurement"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+        <field name="global" eval="False"/>
+    </record>
+
+
+    <!-- ========== EQUIPMENT ========== -->
+    <record id="gym_equipment_branch_rule_user" model="ir.rule">
+        <field name="name">Gym Equipment Branch Rule (User)</field>
+        <field name="model_id" ref="mgs_gym.model_mgs_gym_equipment"/>
+        <field name="domain_force">[('branch_id', 'in', user.branch_ids.ids)]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="global" eval="False"/>
+    </record>
+
+    <record id="gym_equipment_branch_rule_admin" model="ir.rule">
+        <field name="name">Gym Equipment Branch Rule (Admin)</field>
+        <field name="model_id" ref="mgs_gym.model_mgs_gym_equipment"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+        <field name="global" eval="False"/>
+    </record>
+
+
+    <!-- ========== SHIFT ========== -->
+    <record id="gym_shift_branch_rule_user" model="ir.rule">
+        <field name="name">Gym Shift Branch Rule (User)</field>
+        <field name="model_id" ref="mgs_gym.model_mgs_gym_shift"/>
+        <field name="domain_force">[('branch_id', 'in', user.branch_ids.ids)]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="global" eval="False"/>
+    </record>
+
+    <record id="gym_shift_branch_rule_admin" model="ir.rule">
+        <field name="name">Gym Shift Branch Rule (Admin)</field>
+        <field name="model_id" ref="mgs_gym.model_mgs_gym_shift"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+        <field name="global" eval="False"/>
+    </record>
+
+</odoo>
