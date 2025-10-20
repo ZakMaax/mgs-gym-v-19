@@ -1,8 +1,14 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 
 access_mgs_gym_branch,access.mgs_gym.branch,mgs_gym.model_mgs_gym_branch,,1,1,1,1
-access_mgs_gym_shift,access.mgs_gym.saving_product,mgs_gym.model_mgs_gym_shift,,1,1,1,1
-access_mgs_gym_membership_state,access.mgs_gym.saving_account,mgs_gym.model_mgs_gym_membership_state,,1,1,1,1
+access_mgs_gym_class,access.mgs_gym.class,mgs_gym.model_mgs_gym_class,,1,1,1,1
+access_mgs_gym_shift,access.mgs_gym.shift,mgs_gym.model_mgs_gym_shift,,1,1,1,1
+access_mgs_gym_membership_state,access.mgs_gym.membership_state,mgs_gym.model_mgs_gym_membership_state,,1,1,1,1
 access_mgs_gym_membership,access.mgs_gym.membership,mgs_gym.model_mgs_gym_membership,,1,1,1,1
-access_mgs_gym_measurement,access.mgs_gym.measurement,mgs_gym.model_mgs_gym_measurement,,1,1,1,1
 access_mgs_gym_meal_plan,access.mgs_gym.meal_plan,mgs_gym.model_mgs_gym_meal_plan,,1,1,1,1
+access_mgs_gym_measurement,access.mgs_gym.measurement,mgs_gym.model_mgs_gym_measurement,,1,1,1,1
+access_mgs_gym_measurement_report_wizard,access.mgs_gym.measurement_report_wizard,mgs_gym.model_mgs_gym_measurement_report_wizard,,1,1,1,1
+access_mgs_gym_membership_report_wizard,access.mgs_gym.membership_report_wizard,mgs_gym.model_mgs_gym_membership_report_wizard,,1,1,1,1
+access_mgs_gym_equipment,access.mgs_gym.equipment,mgs_gym.model_mgs_gym_equipment,,1,1,1,1
+
+
