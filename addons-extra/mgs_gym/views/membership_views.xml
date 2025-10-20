@@ -80,7 +80,7 @@
                     <group>
                     <group>
                         <field name="partner_id" readonly="state == 'Active'"/>
-                        <field name="branch_id" readonly="state == 'Active'"/>
+                        <field name="branch_id" />
                         <field name="shift_id" readonly="state == 'Active'"/>
                         <field name="class_id" readonly="state == 'Active'"/>
                         <field name="service_id" readonly="state == 'Active'"/>
