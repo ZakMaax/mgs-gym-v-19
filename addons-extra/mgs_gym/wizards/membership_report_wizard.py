@@ -7,6 +7,7 @@ import base64
 
 class GymMembership(models.Model):
     _name = "mgs_gym.membership_report_wizard"
+    _description = "Membership Report Wizard"
 
     branch_id = fields.Many2one(
         "mgs_gym.branch",
