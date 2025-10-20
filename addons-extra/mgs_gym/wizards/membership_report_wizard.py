@@ -197,6 +197,30 @@ class GymMembership(models.Model):
         sheet.write_number(row, 8, total_discounted, num_fmt)
         sheet.write_number(row, 9, total_refunded, num_fmt)
 
+        # Net profit row (after discounts and refunds)
+        net_profit = (
+            (total_amount or 0.0) - (total_discounted or 0.0) - (total_refunded or 0.0)
+        )
+        profit_fmt = workbook.add_format(
+            {
+                "bold": True,
+                "border": 1,
+                "num_format": "#,##0.00",
+                "font_color": "#0b8457",
+                "align": "right",
+            }
+        )
+        profit_row = row + 1
+        sheet.write(profit_row, 0, "Net Profit", header_fmt)
+        # blank intermediate cells to align the net value under Amount column
+        sheet.write_blank(profit_row, 1, None, header_fmt)
+        sheet.write_blank(profit_row, 2, None, header_fmt)
+        sheet.write_blank(profit_row, 3, None, header_fmt)
+        sheet.write_blank(profit_row, 4, None, header_fmt)
+        sheet.write_blank(profit_row, 5, None, header_fmt)
+        sheet.write_blank(profit_row, 6, None, header_fmt)
+        sheet.write_number(profit_row, 7, net_profit, profit_fmt)
+
         workbook.close()
         out = base64.b64encode(fp.getvalue())
         fp.close()
