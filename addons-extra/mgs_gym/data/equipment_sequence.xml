@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="seq_mgs_gym_equipment" model="ir.sequence">
+    <field name="name">Gym Equipment</field>
+    <field name="code">mgs_gym.equipment</field>
+    <field name="prefix">EQP</field>
+    <field name="padding">3</field>
+    <field name="number_increment">1</field>
+  </record>
+</odoo>
