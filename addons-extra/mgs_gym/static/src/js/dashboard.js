@@ -91,6 +91,7 @@ export class GymDashboard extends Component {
       domain: [
         ["next_invoice_date", ">=", today],
         ["next_invoice_date", "<=", inSevenStr],
+        ["state", "=", "Active"],
       ],
     });
   }
