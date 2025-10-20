@@ -1,0 +1,51 @@
+<odoo>
+  <template id="membership_receipt">
+    <t t-call="web.html_container">
+      <t t-call="web.external_layout">
+        <div class="page">
+          <t t-foreach="docs" t-as="doc">
+            <h2 style="text-align:center;">Membership Receipt</h2>
+
+            <p><strong>Membership No:</strong> <span t-esc="doc.name"/></p>
+            <p><strong>Member:</strong> <span t-esc="doc.partner_id.name"/></p>
+            <p><strong>Branch:</strong> <span t-esc="doc.branch_id.name"/></p>
+            <p><strong>Shift:</strong> <span t-esc="doc.shift_id.name"/></p>
+
+            <p>
+              <strong>Service:</strong>
+              <span t-esc="doc.service_id.name"/> 
+              (<span t-esc="doc.recurrence_unit.capitalize()"/>)
+            </p>
+
+            <p>
+              <strong>Start Date:</strong>
+              <span t-esc="doc.start_date or doc.create_date"/>
+            </p>
+
+            <p>
+              <strong>Expiry Date:</strong>
+              <span t-esc="doc.next_invoice_date or ''"/>
+            </p>
+
+            <p><strong>Amount:</strong> 
+              <span t-esc="doc.amount"/> 
+              <span t-esc="doc.company_currency_id.symbol"/>
+            </p>
+
+            <p><strong>Discount:</strong> 
+              <span t-esc="doc.discount_percent"/>%
+            </p>
+
+            <p><strong>Total Paid:</strong> 
+              <span t-esc="doc.discounted_amount"/> 
+              <span t-esc="doc.company_currency_id.symbol"/>
+            </p>
+
+            <hr/>
+            <p style="text-align:center;">Thank you for registering!</p>
+          </t>
+        </div>
+      </t>
+    </t>
+  </template>
+</odoo>
