@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+   <record id="action_measurement_report" model="ir.actions.report">
+        <field name="name">Measurements Report</field>
+        <field name="model">mgs_gym.measurement</field>  
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">mgs_gym.measurement_report</field>
+        <field name="report_file">mgs_gym.measurement_report</field>
+        <field name="print_report_name">'Measurements of %s' % object.partner_id.name</field> 
+        <field name="binding_type">report</field>
+    </record>
+
+   <record id="action_membership_report" model="ir.actions.report">
+        <field name="name">Membership Report</field>
+        <field name="model">mgs_gym.membership</field>  
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">mgs_gym.membership_report</field>
+        <field name="report_file">mgs_gym.membership_report</field>
+        <field name="print_report_name">Memberships Report</field> 
+        <field name="paperformat_id" ref="mgs_gym.mgs_paperformat_membership_report" />
+        <field name="binding_type">report</field>
+    </record>
+
+    
+   <record id="action_report_gym_membership_receipt" model="ir.actions.report">
+        <field name="name">Membership Receipt Report</field>
+        <field name="model">mgs_gym.membership</field>  
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">mgs_gym.membership_receipt</field>
+        <field name="report_file">mgs_gym.membership_receipt</field>
+        <field name="print_report_name">'Receipt of %s' % object.partner_id.name</field> 
+        <field name="binding_type">report</field>
+    </record>
+
+</odoo>
