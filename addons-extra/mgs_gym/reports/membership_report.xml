@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="membership_report">
+    <t t-call="web.html_container">
+        <t t-call="web.external_layout">
+            <div class="page">
+                <h2 class="report-title">Membership Report</h2>
+                <table class="o_report_table" style="width:100%; border-collapse:collapse;">
+                    <thead>
+                        <tr class="thead" style="background-color: #0d6efd; color: white;">
+                            <th style="width:30%; text-align:right; padding-right: 3px">Ref</th>
+                            <!-- <th style="width:15%; text-align:right; padding-right: 3px">Date</th> -->
+                            <th style="width:10%; text-align:right; padding-right: 3px">Branch</th>
+                            <th style="width:10%; text-align:right; padding-right: 3px">Shift</th>
+                            <th style="width:10%; text-align:right; padding-right: 3px">Gender</th>
+                            <th style="width:15%; text-align:right; padding-right: 3px">State</th>
+                            <th style="width:15%; text-align:right; padding-right: 3px">Service</th>
+                            <th style="width:15%; text-align:right; padding-right: 3px">Package</th>
+                            <th style="width:15%; text-align:right; padding-right: 3px">Amount</th>
+                            <th style="width:15%; text-align:right; padding-right: 3px">Discounted Amount</th>
+                            <th style="width:15%; text-align:right; padding-right: 3px">Refunded Amount</th>
+                            <th style="width:15%; text-align:right; padding-right: 3px">Date of Expiry</th>          
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-if="docs">
+                            <t t-foreach="docs" t-as="rec">
+                                <tr class="o_data_row">
+                                    <td style="text-align:right; padding:6px 8px; border-bottom:1px solid #efefef;">
+                                        <t t-esc="rec.name"/>
+                                    </td>
+                                    <!-- <td style="text-align:right; padding:6px 8px; border-bottom:1px solid #efefef;">
+                                        <t t-esc="rec.date"/>
+                                    </td> -->
+                                    <td style="text-align:right; padding:6px 8px; border-bottom:1px solid #efefef;">
+                                        <t t-esc="rec.branch_id.name"/>
+                                    </td>
+                                    <td style="text-align:right; padding:6px 8px; border-bottom:1px solid #efefef;">
+                                        <t t-esc="rec.shift_id.name"/>
+                                    </td>
+                                     <td style="text-align:right; padding:6px 8px; border-bottom:1px solid #efefef;">
+                                        <t t-esc="rec.gender"/>
+                                    </td>
+                                     <td style="text-align:right; padding:6px 8px; border-bottom:1px solid #efefef;">
+                                        <t t-esc="rec.state_id.name"/>
+                                    </td>
+                                     <td style="text-align:right; padding:6px 8px; border-bottom:1px solid #efefef;">
+                                        <t t-esc="rec.service_id.name"/>
+                                    </td>
+                                     <td style="text-align:right; padding:6px 8px; border-bottom:1px solid #efefef;">
+                                        <t t-esc="rec.recurrence_unit"/>
+                                    </td>
+                                     <td style="text-align:right; padding:6px 8px; border-bottom:1px solid #efefef;">
+                                        <t t-esc="rec.amount"/>
+                                    </td>
+                                    <!-- Always show discounted amount as numeric (0.0 when no discount) to match Excel export -->
+                                    <td style="text-align:right; padding:6px 8px; border-bottom:1px solid #efefef;">
+                                        <t t-esc="rec.discounted_amount or 0.0"/>
+                                    </td>
+                                    <!-- Always display refunded amount (0.0 when none) to match Excel export -->
+                                    <td style="text-align:right; padding:6px 8px; border-bottom:1px solid #efefef;">
+                                        <t t-esc="rec.refund_due or 0.0"/>
+                                    </td>
+                                     <td style="text-align:right; padding:6px 8px; border-bottom:1px solid #efefef;">
+                                        <t t-esc="rec.next_invoice_date"/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </t>
+                          
+                        <t t-if="not docs">
+                            <tr>
+                                <td colspan="6" style="text-align:center; padding:18px; color:#666;">No data available for the selected filters.</td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+            </div>
+            <div style="margin-top:12px; font-size:11px; color:#666;">
+                    Report generated by <t t-esc="docs[0].env.user.name"/> on <t t-esc="time.strftime('%Y-%m-%d %H:%M')"/>
+            </div>
+        </t>
+    </t>
+</template>
+
+</odoo>
