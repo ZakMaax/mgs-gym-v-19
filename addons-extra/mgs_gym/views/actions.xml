@@ -1,6 +1,12 @@
 <odoo>
     <!-- Actions for mgs_gym -->
 
+    <record id="action_mgs_gym_dashboard" model="ir.actions.client">
+        <field name="name">Gym Dashboard</field>
+        <field name="tag">mgs_gym.Dashboard</field>
+    </record>
+
+
     <record id="action_gym_partner" model="ir.actions.act_window">
         <field name="name">Partner</field>
         <field name="res_model">res.partner</field>
@@ -14,10 +20,34 @@
         </field>
     </record>
 
+     <record id="action_gym_user" model="ir.actions.act_window">
+        <field name="name">User</field>
+        <field name="res_model">res.users</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="view_id" ref="view_gym_users_kanban_inherit"/>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                No GYM Users.
+            </p>
+        </field>
+    </record>
+
+      <record id="action_gym_equipment" model="ir.actions.act_window">
+        <field name="name">Equipment</field>
+        <field name="res_model">mgs_gym.equipment</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="view_id" ref="view_mgs_gym_equipment_kanban"/>
+        <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    No Equipments.
+                </p>
+            </field>
+     </record>
+
     <record id="action_gym_memebrship" model="ir.actions.act_window">
         <field name="name">Membership</field>
         <field name="res_model">mgs_gym.membership</field>
-        <field name="view_mode">list,form,kanban</field>
+        <field name="view_mode">list,form</field>
         <field name="help" type="html">
             <p class="oe_view_nocontent_create">
                 No Memberships.
@@ -47,6 +77,17 @@
         </field>
     </record>
 
+      <record id="action_mgs_gym_class" model="ir.actions.act_window">
+        <field name="name">Class</field>
+        <field name="res_model">mgs_gym.class</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                No Classes.
+            </p>
+        </field>
+    </record>
+
     <record id="action_mgs_gym_measurement" model="ir.actions.act_window">
         <field name="name">Measurements</field>
         <field name="res_model">mgs_gym.measurement</field>
@@ -56,6 +97,39 @@
     <record id="action_mgs_gym_meal_plan" model="ir.actions.act_window">
         <field name="name">Meal Plans</field>
         <field name="res_model">mgs_gym.meal_plan</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_gym_measurement_reporting_wizard" model="ir.actions.act_window">
+        <field name="name">Measurement Report</field>
+        <field name="res_model">mgs_gym.measurement_report_wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="mgs_gym_measurement_report_wizard_form_view" />
+        <field name="target">new</field>
+    </record>
+
+    <record id="action_gym_membership_reporting_wizard" model="ir.actions.act_window">
+        <field name="name">Membership Report</field>
+        <field name="res_model">mgs_gym.membership_report_wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="mgs_gym_membership_report_wizard_form_view" />
+        <field name="target">new</field>
+    </record>
+
+
+    <record id="action_mgs_gym_product_service" model="ir.actions.act_window">
+        <field name="name">Products and Services</field>
+        <field name="res_model">product.template</field>
+        <field name="view_mode">kanban,list,form</field>
+    </record>
+     <record id="action_mgs_gym_product_attribute" model="ir.actions.act_window">
+        <field name="name">Product Attributes</field>
+        <field name="res_model">product.attribute</field>
+        <field name="view_mode">list,form</field>
+    </record>
+      <record id="action_mgs_gym_sales" model="ir.actions.act_window">
+        <field name="name">Sale</field>
+        <field name="res_model">sale.order</field>
         <field name="view_mode">list,form</field>
     </record>
 

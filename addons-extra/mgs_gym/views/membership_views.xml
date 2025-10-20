@@ -8,11 +8,15 @@
                 <field name="partner_id"/>
                 <field name="branch_id"/>
                 <field name="shift_id"/>
+                <field name="recurrence_product_id" optional="hide"/>
                 <field name="start_date"/>
                 <field name="next_invoice_date"/>
                 <field name="recurrence_unit"/>
-                <field name="amount"/>
+                <field name="amount" />
+                <field name="discount_percent" optional="hide"/>
+                <field name="discounted_amount"/>
                 <field name="state"/>
+                <field name="refund_due" optional="hide"/>
             </list>
         </field>
     </record>
@@ -22,15 +26,52 @@
         <field name="model">mgs_gym.membership</field>
         <field name="arch" type="xml">
             <form string="Membership">
-                <sheet>
                     <header>
+                        <button name="action_print_receipt" type="object" string="Print Receipt" class="btn-primary" invisible="state != 'Active'"/>
+                        <!-- Suspend: only visible when currently Active -->
+                        <button class="btn btn-warning text-white" name="make_suspended" string="Suspend" type="object"
+                            invisible="state != 'Active'"/>
+                        <!-- Cancel: visible unless already Cancelled -->
+                        <button class="btn btn-danger text-white" name="make_cancelled" string="Cancel" type="object"
+                            invisible="state == 'Cancelled'"/>
+                        <!-- Draft: visible unless already in Draft -->
+                        <button class="btn text-black" name="make_draft" string="Reset to Draft" type="object"
+                            invisible="state == 'Draft'"/>
+                        <!-- Activate: visible only when Cancelled or Suspended -->
+                        <button class="btn btn-primary text-white" name="make_active" string="Activate" type="object"
+                            invisible="state not in ('Cancelled', 'Suspended', 'Draft')"/>
+                        <!-- Renew: visible only when in Expired state (uses computed flag) -->
+                        <button class="btn btn-success text-white" name="action_renew" type="object" string="Renew"
+                            invisible="not can_renew"/>
+                         <!-- Refund: visible only when Suspended and not already refunded -->
+                         <button class="btn btn-info text-white" name="action_refund" string="Refund" type="object"
+                            invisible="state != 'Suspended' or refunded"/>  
                         <field 
                             name="state_id" 
                             widget="statusbar_duration" 
-                            options="{'clickable': 1}" 
-                            statusbar_visible="draft,active,suspended,cancelled"
+                            options="{'clickable': 0}" 
+                            statusbar_visible="draft,active,suspended,expired,cancelled"
                          />
                     </header>
+                <sheet>
+
+                <widget name="web_ribbon" title="Refunded" bg_color="text-bg-danger" invisible="not refunded"/>
+
+                   <div name="button_box" position="inside">
+                        <button class="oe_stat_button mr-2"
+                                type="object"
+                                icon="fa-edit"
+                                name="action_view_invoices" >
+                            Invoices
+                        </button>
+                        <button class="oe_stat_button"
+                                type="object"
+                                icon="fa-bars"
+                                name="action_view_payments" >
+                            Payments
+                        </button>
+                    </div>
+            
                     <div class="oe_title">
                         <h1>
                             <field name="name"/>
@@ -38,19 +79,25 @@
                     </div>
                     <group>
                     <group>
-                        <field name="partner_id"/>
-                        <field name="branch_id"/>
-                        <field name="shift_id"/>
-                        <field name="service_id" invisible="1"/>
-                        <field name="recurrence_product_id"/>
+                        <field name="partner_id" readonly="state == 'Active'"/>
+                        <field name="branch_id" readonly="state == 'Active'"/>
+                        <field name="shift_id" readonly="state == 'Active'"/>
+                        <field name="class_id" readonly="state == 'Active'"/>
+                        <field name="service_id" readonly="state == 'Active'"/>
+                        <field name="recurrence_product_id" readonly="state == 'Active'"/>
                         <field name="amount"/>
+                        <field name="discount_percent" readonly="state == 'Active'"/>
+                        <field name="discounted_amount" invisible="not discount_percent" readonly="state == 'Active'"/>
+                        <field name="refund_due" invisible="state != 'Suspended'"  readonly="state == 'Active'"/>
+
                     </group>
                     <group>
-                        <field name="recurrence_unit"/>
-                        <field name="recurrence_interval"/>
-                        <field name="start_date"/>
-                        <field name="next_invoice_date"/>
-                        <field name="auto_invoice"/>
+                        <field name="recurrence_unit" readonly="state == 'Active'"/>
+                        <field name="recurrence_interval" readonly="state == 'Active'"/>
+                        <field name="start_date" readonly="state == 'Active'"/>
+                        <field name="next_invoice_date" readonly="state == 'Active'"/>
+                        <field name="invoice_journal_id" readonly="state == 'Active'"/>
+                        <field name="payment_journal_id" readonly="state == 'Active'"/>
                     </group>
                     </group>
                 </sheet>
@@ -59,24 +106,6 @@
         </field>
     </record>
 
-    <record id="view_mgs_gym_membership_kanban" model="ir.ui.view">
-        <field name="name">mgs_gym.membership.kanban</field>
-        <field name="model">mgs_gym.membership</field>
-        <field name="arch" type="xml">
-            <kanban>
-                <field name="name"/>
-                <field name="partner_id"/>
-                <templates>
-                    <t t-name="kanban-box">
-                        <div class="oe_kanban_global_click">
-                            <strong><field name="name"/></strong>
-                            <div><field name="partner_id"/></div>
-                        </div>
-                    </t>
-                </templates>
-            </kanban>
-        </field>
-    </record>
 
 
     <record id="mgs_gym_memebrship_search_view" model="ir.ui.view">
@@ -110,6 +139,10 @@
                 <filter string="Suspended" 
                         name="suspended"
                         domain="[('state', '=', 'Suspended')]"
+                />
+                  <filter string="Refunded" 
+                        name="refunded"
+                        domain="[('refunded', '=', True)]"
                 />
                  <filter string="Cancelled" 
                         name="cancelled"

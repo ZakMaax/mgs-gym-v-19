@@ -1,5 +1,7 @@
 <odoo>
-    <record id="cron_generate_gym_invoices" model="ir.cron">
+
+    <!-- RECURRING INVOICE GENERATION CRON JOB -->
+    <!-- <record id="cron_generate_gym_invoices" model="ir.cron">
         <field name="name">Generate Gym Membership Invoices</field>
         <field name="model_id" ref="model_mgs_gym_membership"/>
         <field name="state">code</field>
@@ -7,5 +9,26 @@
         <field name="interval_number">1</field>
         <field name="interval_type">days</field>
         <field name="active" eval="True"/>
+    </record> -->
+    <record id="cron_expire_gym_memberships" model="ir.cron">
+        <field name="name">Expire Gym Memberships</field>
+        <field name="model_id" ref="model_mgs_gym_membership"/>
+        <field name="state">code</field>
+        <field name="code">model.expire_due_memberships()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="active" eval="True"/>
     </record>
+
+    <record id="ir_cron_notify_upcoming_expirations" model="ir.cron">
+        <field name="name">Notify Upcoming Membership Expirations</field>
+        <field name="model_id" ref="model_mgs_gym_membership"/>
+        <field name="state">code</field>
+        <field name="code">model.notify_upcoming_expirations()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="active" eval="True"/>
+        <field name="user_id" ref="base.user_root"/>
+    </record>
+
 </odoo>

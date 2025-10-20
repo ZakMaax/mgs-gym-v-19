@@ -37,8 +37,9 @@
              <xpath expr="//field[@name='function']" position="after">
                 <group string="GYM Info">
                     <field name="is_gym_member"/>
-                    <field name="branch_id"/>
-                    <field name="gender"/>
+                    <field name="branch_id" required="is_gym_member"/>
+                    <field name="company_id" required="is_gym_member"/>
+                    <field name="gender" required="is_gym_member"/>
                 </group>
             </xpath>
         </field>
@@ -61,16 +62,16 @@
 
                     <div t-if="record.gender.raw_value" class="d-flex align-items-center text-muted">
                         <t t-if="record.gender.raw_value == 'male'">
-                            <i class="fa fa-male me-1 text-primary"/>
+                            <i class="fa fa-male me-1 text-primary"  title="Male"/>
                         </t>
                         <t t-else="">
-                            <i class="fa fa-female me-1 text-pink"/>
+                            <i class="fa fa-female me-1 text-pink"  title="Female"/>
                         </t>
                         <field name="gender"/>
                     </div>
 
                     <div t-if="record.branch_id.raw_value" class="d-flex align-items-center text-muted">
-                        <i class="fa fa-building-o me-1 text-secondary"/>
+                        <i class="fa fa-building-o me-1 text-secondary" title="Branch"/>
                         <field name="branch_id"/>
                     </div>
                 </div>

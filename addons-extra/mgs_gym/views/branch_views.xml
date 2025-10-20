@@ -5,9 +5,12 @@
         <field name="arch" type="xml">
             <list string="Gym Branches">
                 <field name="name"/>
+                <field name="gender"/>
                 <field name="manager_id"/>
                 <field name="is_active"/>
                 <field name="address"/>
+                <field name="analytic_account_id"/>
+                <field name="reminder_days"/>
             </list>
         </field>
     </record>
@@ -20,9 +23,15 @@
                 <sheet>
                     <group>
                         <field name="name"/>
+                        <field name="gender"/>
                         <field name="manager_id"/>
                         <field name="is_active"/>
                         <field name="address"/>
+                    </group>
+                    <group>
+                        <field name="company_id"/>
+                        <field name="analytic_account_id"/>
+                        <field name="reminder_days"/>
                     </group>
                 </sheet>
             </form>

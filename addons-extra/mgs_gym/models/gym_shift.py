@@ -7,6 +7,10 @@ class GymShift(models.Model):
 
     name = fields.Char(string="Name", required=True)
     branch_id = fields.Many2one("mgs_gym.branch", string="Branch", required=True)
+    company_id = fields.Many2one(
+        related="branch_id.company_id", string="Company", required=True, readonly=True
+    )
+    coach_id = fields.Many2many("res.users", string="Coach", required=True)
     active = fields.Boolean(default=True)
     start_time = fields.Float(
         string="Start Hour", required=True, help="e.g., 6.0 = 6 AM, 18.5 = 6:30 PM"
@@ -14,15 +18,7 @@ class GymShift(models.Model):
     end_time = fields.Float(
         string="End Hour", required=True, help="e.g., 6.0 = 6 AM, 18.5 = 6:30 PM"
     )
-    gender = fields.Selection(
-        [("male", "Male"), ("female", "Female")], string="Gender", required=True
-    )
-    service_id = fields.Many2one(
-        "product.template",
-        string="Service",
-        domain="[('type', '=', 'service')]",
-        required=True,
-    )
+    # Shifts are schedule slots and do not reference services directly anymore.
     capacity = fields.Integer(
         string="Capacity",
         default=0,
@@ -45,7 +41,6 @@ class GymShift(models.Model):
         Simple inference:
         - If 0 < time <= 12 → assume AM
         - If time > 12 → assume PM (24h format)
-        - Optional: you can add heuristics like if start < end, etc.
         """
         for field in ["start_time", "end_time"]:
             if field in vals:

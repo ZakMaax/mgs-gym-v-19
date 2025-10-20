@@ -4,11 +4,13 @@
         <field name="model">mgs_gym.measurement</field>
         <field name="arch" type="xml">
             <list string="Measurements">
-                <field name="member_id"/>
+                <field name="name"/>
+                <field name="partner_id"/>
                 <field name="date"/>
                 <field name="weight"/>
                 <field name="height"/>
                 <field name="bmi"/>
+                <field name="bmi_text"/>
             </list>
         </field>
     </record>
@@ -19,22 +21,28 @@
         <field name="arch" type="xml">
             <form string="Measurement">
                 <sheet>
-                  <group>
-                      <group>
-                        <field name="member_id"/>
-                        <field name="date"/>
-                    </group>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+
                     <group>
-                        <field name="weight"/>
-                        <field name="height"/>
-                        <field name="bmi" readonly="1"/>
-                        <group string="Optional Info">
-                            <field name="body_fat_percentage"/>
-                            <field name="muscle_mass"/>
+                        <group>
+                            <field name="partner_id"/>
+                            <field name="date"/>
+                        </group>
+                        <group>
+                            <field name="weight"/>
+                            <field name="height"/>
+                            <field name="bmi" readonly="1"/>
+                            <field name="bmi_text" readonly="1"/>
                         </group>
                     </group>
-                  
-                  </group>
+
+                    <group string="Optional Info">
+                        <field name="body_fat_percentage"/>
+                        <field name="muscle_mass"/>
+                    </group>
+
                     <notebook>
                         <page name="note" string="Notes">
                             <field name="note"/>
@@ -43,6 +51,7 @@
                 </sheet>
                 <chatter/>
             </form>
+
         </field>
     </record>
 

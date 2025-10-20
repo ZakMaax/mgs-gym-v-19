@@ -4,7 +4,8 @@
         <field name="model">mgs_gym.meal_plan</field>
         <field name="arch" type="xml">
             <list string="Meal Plans">
-                <field name="member_id"/>
+                <field name="name"/>
+                <field name="partner_id"/>
                 <field name="coach_id"/>
                 <field name="date_from"/>
                 <field name="date_to"/>
@@ -18,9 +19,12 @@
         <field name="arch" type="xml">
             <form string="Meal Plan">
                 <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
                    <group>     
                         <group>
-                            <field name="member_id"/>
+                            <field name="partner_id"/>
                             <field name="coach_id"/>
                         </group>
                         <group>

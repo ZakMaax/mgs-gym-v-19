@@ -1,20 +1,29 @@
 <odoo>
-    <menuitem id="root_mgs_gym_menu" name="GYM" web_icon="mgs_gym,static/description/icon.jpg"/>
+    <menuitem id="root_mgs_gym_menu" name="Baazi GYM" web_icon="mgs_gym,static/description/icon.png"/>
     
+    <menuitem 
+        id="mgs_gym_dashboard_menu" 
+        name="Dashboard" 
+        parent="root_mgs_gym_menu" 
+        action="action_mgs_gym_dashboard" 
+        sequence="1"
+    />
     <menuitem
         id="gym_members_menu"
         name="Members"
         parent="root_mgs_gym_menu"
-        sequence="1"
+        sequence="2"
     />
 
-      <menuitem
+    <menuitem
         id="gym_member_menu"
         name="Members"
         parent="gym_members_menu"
         action="action_gym_partner"
         sequence="1"
     />
+
+
 
      <menuitem
         id="gym_membership_menu"
@@ -24,26 +33,72 @@
         sequence="2"
     />
 
-
-
-    <menuitem
-        id="gym_meal_plan_menu"
-        name="Meal Plans"
+     <menuitem
+        id="gym_users_menu"
+        name="Users"
         parent="root_mgs_gym_menu"
-        action="action_mgs_gym_meal_plan"
-        sequence="2"
+        action="action_gym_user"
+        sequence="3"
     />
+
 
      <menuitem
         id="gym_measurement_menu"
         name="Measurements"
         parent="root_mgs_gym_menu"
         action="action_mgs_gym_measurement"
-        sequence="3"
+        sequence="4"
     />
 
 
+ 
+    <menuitem
+        id="gym_meal_plan_menu"
+        name="Meal Plans"
+        parent="root_mgs_gym_menu"
+        action="action_mgs_gym_meal_plan"
+        sequence="5"
+    />
 
+    <menuitem
+        id="gym_reporting_menu"
+        name="Reporting"
+        parent="root_mgs_gym_menu"
+        sequence="6"
+    />
+
+
+    <menuitem
+        id="gym_measurement_reporting_menu"
+        name="Measurement Reporting"
+        parent="gym_reporting_menu"
+        sequence="1"
+        action="action_gym_measurement_reporting_wizard"
+    />
+
+    
+    <menuitem
+        id="gym_membership_reporting_menu"
+        name="Membership Reporting"
+        parent="gym_reporting_menu"
+        sequence="1"
+        action="action_gym_membership_reporting_wizard"
+    />
+
+    <menuitem 
+        id="gym_equipment_menu" 
+        name="Equipment" 
+        parent="root_mgs_gym_menu" 
+        action="action_gym_equipment" 
+        sequence="7"
+    />
+     <menuitem 
+        id="gym_sale_menu" 
+        name="Sale" 
+        parent="root_mgs_gym_menu" 
+        action="action_mgs_gym_sales" 
+        sequence="8"
+    />
     <!-- configuration menu -->
 
     <menuitem
@@ -51,6 +106,7 @@
         name="Configuration"
         parent="root_mgs_gym_menu"
         sequence="9"
+        groups="base.group_system"
     />
 
     <!-- Branch menu (inside configuration) -->
@@ -70,6 +126,39 @@
         parent="mgs_gym_configuration_menu"
         sequence="2"
         action="action_mgs_gym_shift"
+    />
+
+     <menuitem
+        id="mgs_gym_class_menu"
+        name="Class"
+        parent="mgs_gym_configuration_menu"
+        sequence="3"
+        action="action_mgs_gym_class"
+    />
+
+    <!-- Service configuration -->
+    <!-- Services header (non-clickable) -->
+    <menuitem
+        id="mgs_gym_services_header"
+        name="Products &amp; Services"
+        parent="mgs_gym_configuration_menu"
+        sequence="4"
+    />
+
+    <menuitem
+        id="mgs_gym_service_menu"
+        name="Product Template"
+        parent="mgs_gym_services_header"
+        sequence="1"
+        action="action_mgs_gym_product_service"
+    />
+
+    <menuitem
+        id="mgs_gym_membership_service_menu"
+        name="Product Attributes"
+        parent="mgs_gym_services_header"
+        sequence="2"
+        action="action_mgs_gym_product_attribute"
     />
 
 </odoo>
