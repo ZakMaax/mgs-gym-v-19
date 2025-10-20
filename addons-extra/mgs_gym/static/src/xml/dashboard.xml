@@ -1,0 +1,145 @@
+<templates xml:space="preserve">
+    <t t-name="mgs_gym.Dashboard">
+        <div class="o_mgs_gym_dashboard container-fluid p-4">
+            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                <h1 class="display-5 mb-0 text-primary font-weight-bold">
+                    <i class="fa fa-dumbbell mr-2 text-primary"></i>
+                    GYM Analytics
+                </h1>
+            </div>
+
+            <div class="row">
+                <t t-if="state.data">
+                    <div class="col-md-3 mb-3">
+                        <div t-on-click="openActiveMembershipsView" class="hovering card shadow-sm h-100" style="border-left: 6px solid #0d6efd; cursor: pointer;">
+                            <div class="card-body d-flex align-items-center">
+                                <div class="card-icon me-3">
+                                    <div class="icon-bg icon-users">
+                                        <img src="/mgs_gym/static/src/icons/users.svg" alt="active"/>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="text-muted small">Active Memberships</div>
+                                    <div class="h3 fw-bold"> <t t-esc="state.data.active"/></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <div t-on-click="openExpiredMembershipsView" class="hovering card shadow-sm h-100" style="border-left: 6px solid #dc3545; cursor: pointer;">
+                            <div class="card-body d-flex align-items-center">
+                                <div class="card-icon me-3">
+                                    <div class="icon-bg icon-expiry">
+                                        <img src="/mgs_gym/static/src/icons/goal-expiry.svg" alt="expired"/>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="text-muted small">Expired</div>
+                                    <div class="h3 fw-bold"> <t t-esc="state.data.expired"/></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <div t-on-click="openSuspendedMembershipsView" class="hovering card shadow-sm h-100" style="border-left: 6px solid #ffc107; cursor: pointer;">
+                            <div class="card-body d-flex align-items-center">
+                                <div class="card-icon me-3">
+                                    <div class="icon-bg icon-ban">
+                                        <img src="/mgs_gym/static/src/icons/ban.svg" alt="suspended"/>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="text-muted small">Suspended</div>
+                                    <div class="h3 fw-bold"> <t t-esc="state.data.suspended"/></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <div t-on-click="openAboutToExpireView" class="hovering card shadow-sm h-100" style="border-left: 6px solid #198754; cursor: pointer;">
+                            <div class="card-body d-flex align-items-center">
+                                <div class="card-icon me-3">
+                                    <div class="icon-bg icon-time">
+                                        <img src="/mgs_gym/static/src/icons/time.svg" alt="about"/>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="text-muted small">About to Expire (7 days)</div>
+                                    <div class="h3 fw-bold"> <t t-esc="state.data.about_to_expire"/></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+                <t t-else="">
+                    <p>Loading...</p>
+                </t>
+            </div>
+
+            <hr/>
+
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-header bg-white">
+                            <strong>Memberships by Branch</strong>
+                        </div>
+                        <div class="card-body d-flex justify-content-center align-items-center" style="min-height:260px;">
+                            <canvas id="gymBranchPie"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-header bg-white">
+                            <strong>By Gender</strong>
+                        </div>
+                        <div class="card-body d-flex justify-content-center align-items-center" style="min-height:260px;">
+                            <canvas id="gymGenderPie"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-header bg-white">
+                            <strong>By Recurrence Unit</strong>
+                        </div>
+                        <div class="card-body d-flex justify-content-center align-items-center" style="min-height:260px;">
+                            <canvas id="gymRecurrencePie"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- removed full-width revenue block; revenue will be shown side-by-side with timeline below -->
+
+            <div class="row">
+                <div class="col-lg-6 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-header bg-white">
+                            <strong>New Memberships Over Time</strong>
+                        </div>
+                        <div class="card-body" style="min-height:300px;">
+                            <canvas id="gymTimelineLine"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-header bg-white">
+                            <strong>Monthly Revenue (posted invoices)</strong>
+                        </div>
+                        <div class="card-body" style="min-height:300px;">
+                            <canvas id="gymRevenueLine"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>
