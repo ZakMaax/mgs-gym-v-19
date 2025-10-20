@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<record id="view_mgs_gym_equipment_kanban" model="ir.ui.view">
+        <field name="name">mgs_gym.equipment.kanban</field>
+        <field name="model">mgs_gym.equipment</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_nocontent" sample="1" duplicate="false">
+                
+                <field name="image_1920"/> 
+                <field name="reference"/>
+                <field name="name"/>
+                <field name="branch_id"/>
+
+                <templates>
+                    <t t-name="card">
+                        <div t-attf-class="oe_kanban_global_click d-flex p-3">
+                            
+                            <div class="o_kanban_image me-3">
+                                <field name="image_1920" widget="image" class="o_image_64_max"/>
+                            </div>
+                            
+                            <div class="o_kanban_details">
+                                
+                                <div class="o_kanban_record_title">
+                                    <field class="fw-bold" name="name" placeholder="Equipment Name"/>
+                                </div>
+                                
+                                <div>
+                                    <span class="text-muted">Ref: </span>
+                                    <field name="reference"/>
+                                </div>
+
+                                <div>
+                                    <span class="text-muted">Branch: </span>
+                                    <field name="branch_id"/>
+                                </div>
+
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+  <record id="view_mgs_gym_equipment_tree" model="ir.ui.view">
+    <field name="name">mgs_gym.equipment.tree</field>
+    <field name="model">mgs_gym.equipment</field>
+    <field name="arch" type="xml">
+      <list>
+        <field name="reference"/>
+        <field name="name"/>
+        <field name="branch_id"/>
+        <field name="company_id"/>
+        <field name="cost"/>
+        <field name="count"/>
+        <field name="purchase_date"/>
+      </list>
+    </field>
+  </record>
+
+  <record id="view_mgs_gym_equipment_form" model="ir.ui.view">
+    <field name="name">mgs_gym.equipment.form</field>
+    <field name="model">mgs_gym.equipment</field>
+    <field name="arch" type="xml">
+      <form string="Equipment">
+        <sheet>
+        <group>
+          <group>
+            <field name="reference" readonly="1"/>
+            <field name="name"/>
+            <field name="image_1920" widget="image"/>
+          </group>
+          <group>
+            <field name="branch_id"/>
+            <field name="company_id"/>
+            <field name="cost"/>
+            <field name="count"/>
+            <field name="purchase_date"/>
+          </group>
+        </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+
+
+
+</odoo>
