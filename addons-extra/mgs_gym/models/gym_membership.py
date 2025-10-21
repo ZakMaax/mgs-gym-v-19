@@ -135,9 +135,7 @@ class GymMembership(models.Model):
         copy=False,
         ondelete="restrict",
     )
-    state = fields.Char(
-        related="state_id.name", string="State", store=True, translate=True
-    )
+    state = fields.Char(related="state_id.name", string="State", store=True)
 
     can_renew = fields.Boolean(
         string="Can Renew",
