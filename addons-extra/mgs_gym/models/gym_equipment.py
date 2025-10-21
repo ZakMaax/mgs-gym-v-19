@@ -12,6 +12,7 @@ class GymEquipment(models.Model):
         "mgs_gym.branch",
         string="Branch",
         domain=lambda self: [("id", "in", self.env.user.branch_ids.ids)],
+        default=lambda self: self.env.user.default_branch_id,
     )
     company_id = fields.Many2one(
         "res.company", string="Company", default=lambda self: self.env.company
