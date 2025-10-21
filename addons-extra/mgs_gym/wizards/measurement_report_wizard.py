@@ -13,7 +13,10 @@ class MeasurementReportWizard(models.TransientModel):
         "res.partner",
         required=True,
         string="Client",
-        domain=[("is_gym_member", "=", True)],
+        domain=lambda self: [
+            ("branch_id", "in", self.env.user.branch_ids.ids),
+            ("is_gym_member", "=", True),
+        ],
     )
     date_from = fields.Date(string="Date from")
     date_to = fields.Date(string="Date to")
