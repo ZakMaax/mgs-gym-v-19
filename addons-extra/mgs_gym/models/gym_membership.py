@@ -111,8 +111,8 @@ class GymMembership(models.Model):
     )
 
     next_invoice_date = fields.Date(
-        string="Next Invoice Date",
-        help="The next scheduled invoice generation date.",
+        string="Date of Expiry",
+        help="The next scheduled invoice generation date (expiration date).",
     )
 
     company_id = fields.Many2one(
