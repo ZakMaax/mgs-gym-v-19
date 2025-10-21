@@ -3,142 +3,67 @@
   overflow-y: auto !important;
 }
 
-.o_mgs_gym_dashboard .card {
-  border-radius: 8px;
-}
-
-.o_mgs_gym_dashboard .card-header {
-  border-bottom: 0;
-}
-
-.o_mgs_gym_dashboard .h3 {
-  font-size: 1.6rem;
-}
-
-@media (max-width: 768px) {
-  .o_mgs_gym_dashboard .h3 {
-    font-size: 1.2rem;
-  }
-}
-
-/* NEW: modern colorful dashboard styles */
-.o_mgs_gym_dashboard .card {
-  border-radius: 12px;
-  transition: transform 220ms ease, box-shadow 220ms ease;
-  will-change: transform;
-  overflow: hidden;
-}
-
 .o_mgs_gym_dashboard .card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 10px 30px rgba(16, 24, 40, 0.12);
+  box-shadow: 0 10px 25px rgba(16, 24, 40, 0.12);
 }
 
-.o_mgs_gym_dashboard .card-icon {
+.metric-card .metric-icon-bg {
   width: 56px;
   height: 56px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: linear-gradient(135deg, #e0f2fe, #bfdbfe);
+  box-shadow: 0 6px 16px rgba(11, 22, 55, 0.06);
 }
 
-.o_mgs_gym_dashboard .icon-bg {
-  width: 56px;
-  height: 56px;
-  border-radius: 12px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 6px 18px rgba(11, 22, 55, 0.06);
-  transition: transform 260ms ease, box-shadow 260ms ease, filter 260ms ease;
-}
-
-.o_mgs_gym_dashboard .icon-bg img {
+.metric-card img {
   width: 28px;
   height: 28px;
 }
 
-.o_mgs_gym_dashboard .icon-bg.icon-users {
-  background: linear-gradient(135deg, #6ee7b7, #3b82f6);
-}
-.o_mgs_gym_dashboard .icon-bg.icon-expiry {
-  background: linear-gradient(135deg, #fca5a5, #ef4444);
-}
-.o_mgs_gym_dashboard .icon-bg.icon-ban {
-  background: linear-gradient(135deg, #fde68a, #f59e0b);
-}
-.o_mgs_gym_dashboard .icon-bg.icon-time {
-  background: linear-gradient(135deg, #bbf7d0, #10b981);
+.metric-value {
+  font-size: 1.8rem;
+  color: #111827;
 }
 
-.o_mgs_gym_dashboard .card-body .text-muted.small {
-  opacity: 0.85;
+.chart-card .chart-container {
+  min-height: 280px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(180deg, #ffffff 0%, #f9fafb 100%);
+  border-radius: 0 0 14px 14px;
 }
 
-/* Animated entrance */
-.o_mgs_gym_dashboard .card {
-  animation: cardFadeIn 420ms ease both;
-}
-@keyframes cardFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(8px) scale(0.995);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-/* Chart container subtle background */
-.o_mgs_gym_dashboard .card-body {
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.98),
-    rgba(250, 250, 250, 0.98)
-  );
-}
-
-/* Canvas fade-in */
-.o_mgs_gym_dashboard canvas {
+.chart-card canvas {
   opacity: 0;
-  animation: canvasFadeIn 800ms ease 120ms forwards;
+  animation: fadeInCanvas 800ms ease 120ms forwards;
 }
-@keyframes canvasFadeIn {
+
+@keyframes fadeInCanvas {
   to {
     opacity: 1;
   }
 }
 
-/* Small responsive tweaks */
-@media (max-width: 992px) {
-  .o_mgs_gym_dashboard .icon-bg {
-    width: 48px;
-    height: 48px;
-    border-radius: 10px;
-  }
-  .o_mgs_gym_dashboard .card-icon {
-    width: 48px;
-    height: 48px;
-  }
-}
-
-/* Hover highlight for card header */
-.o_mgs_gym_dashboard .card:hover .card-header {
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0.9),
-    rgba(255, 255, 255, 0.95)
-  );
-}
-
-/* subtle link cursor for interactive cards */
-.o_mgs_gym_dashboard [t-on-click],
-.o_mgs_gym_dashboard [data-action] {
+.hovering {
   cursor: pointer;
 }
 
 .hovering:hover {
-  scale: 110%;
-  transition: scale 0.3s ease-in-out;
+  transform: scale(1.05);
+  transition: transform 0.25s ease-in-out;
+}
+
+@media (max-width: 992px) {
+  .metric-card .metric-icon-bg {
+    width: 48px;
+    height: 48px;
+  }
+  .metric-value {
+    font-size: 1.4rem;
+  }
 }
