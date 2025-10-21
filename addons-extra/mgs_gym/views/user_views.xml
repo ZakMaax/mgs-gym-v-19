@@ -12,6 +12,7 @@
                 <field name="login_date" readonly="1" optional="hide"/>
                 <field name="role" widget="badge"/>
                 <field name="branch_ids"  widget="many2many_tags"/>
+                <field name="default_branch_id" />
             </list>
         </field>
     </record>
@@ -28,6 +29,13 @@
                            placeholder="Branch" 
                            required="True" 
                            widget="many2many_tags"
+                           class="w-75"/>
+                </h5>
+                 <h5 name="h5_branch" class="d-flex align-items-baseline mb-0">
+                    <i class="fa fa-fw fa-building-o text-primary" title="Default Branch"/>
+                    <field name="default_branch_id" 
+                           placeholder="Default Branch" 
+                           domain="[('id', 'in', branch_ids)]"
                            class="w-75"/>
                 </h5>
                 
