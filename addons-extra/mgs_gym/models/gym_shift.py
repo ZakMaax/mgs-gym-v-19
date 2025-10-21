@@ -6,7 +6,12 @@ class GymShift(models.Model):
     _description = "GYM Branch Shift"
 
     name = fields.Char(string="Name", required=True)
-    branch_id = fields.Many2one("mgs_gym.branch", string="Branch", required=True)
+    branch_id = fields.Many2one(
+        "mgs_gym.branch",
+        string="Branch",
+        required=True,
+        default=lambda self: self.env.user.default_branch_id,
+    )
     company_id = fields.Many2one(
         related="branch_id.company_id", string="Company", required=True, readonly=True
     )
