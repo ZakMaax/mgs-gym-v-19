@@ -155,7 +155,13 @@ export class GymDashboard extends Component {
       },
       options: {
         responsive: true,
-        plugins: { legend: { display: false } },
+        plugins: {
+          legend: { display: false },
+          title: {
+            display: true,
+            text: "Memberships Over Time",
+          },
+        },
         scales: {
           y: {
             ticks: {
@@ -196,7 +202,13 @@ export class GymDashboard extends Component {
       },
       options: {
         responsive: true,
-        plugins: { legend: { display: false } },
+        plugins: {
+          legend: { display: false },
+          title: {
+            display: true,
+            text: "Revenue Amount Over Time",
+          },
+        },
         scales: {
           y: {
             ticks: {
