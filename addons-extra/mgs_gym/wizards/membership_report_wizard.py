@@ -12,8 +12,8 @@ class GymMembership(models.Model):
     branch_id = fields.Many2one(
         "mgs_gym.branch",
         string="Branch",
+        domain=lambda self: [("id", "in", self.env.user.branch_ids.ids)],
     )
-    gender = fields.Selection([("male", "Male"), ("female", "Female")])
     shift_id = fields.Many2one(
         "mgs_gym.shift",
         string="Shift",
@@ -46,9 +46,6 @@ class GymMembership(models.Model):
         if self.state_id:
             domain.append(("state_id", "=", self.state_id.id))
 
-        if self.gender:
-            domain.append(("gender", "=", self.gender))
-
         if self.recurrence_unit:
             domain.append(("recurrence_unit", "=", self.recurrence_unit))
 
@@ -75,9 +72,6 @@ class GymMembership(models.Model):
 
         if self.state_id:
             domain.append(("state_id", "=", self.state_id.id))
-
-        if self.gender:
-            domain.append(("gender", "=", self.gender))
 
         if self.recurrence_unit:
             domain.append(("recurrence_unit", "=", self.recurrence_unit))
@@ -151,7 +145,7 @@ class GymMembership(models.Model):
             col += 1
             sheet.write(row, col, rec.shift_id.name if rec.shift_id else "", text_fmt)
             col += 1
-            sheet.write(row, col, rec.gender or "", text_fmt)
+            sheet.write(row, col, rec.branch_id.gender or "", text_fmt)
             col += 1
             sheet.write(
                 row,
