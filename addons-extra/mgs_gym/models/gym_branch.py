@@ -1,4 +1,5 @@
 from odoo import models, api, fields  # type: ignore
+from odoo.exceptions import UserError  # type: ignore
 
 
 class GymBranch(models.Model):
@@ -40,3 +41,21 @@ class GymBranch(models.Model):
             )
             branch.analytic_account_id = analytic.id
         return branch
+
+    def unlink(self):
+        # 1. Check for associated memberships
+        for branch in self:
+            membership_count = self.env["mgs_gym.membership"].search_count(
+                [("branch_id", "=", branch.id)]
+            )
+
+            # 2. Raise an error if memberships exist
+            if membership_count > 0:
+                raise UserError(
+                    (
+                        "You cannot delete the branch '%s' because it has %d membership(s) attached to it."
+                    )
+                    % (branch.name, membership_count)
+                )
+
+        return super(GymBranch, self).unlink()
