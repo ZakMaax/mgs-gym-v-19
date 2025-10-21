@@ -7,6 +7,10 @@ class GymShift(models.Model):
 
     name = fields.Char("name")
     active = fields.Boolean(default=True)
-    shift_id = fields.Many2one("mgs_gym.shift", string="Shift")
+    shift_id = fields.Many2one(
+        "mgs_gym.shift",
+        string="Shift",
+        domain=lambda self: [("branch_id", "in", self.env.user.branch_ids.ids)],
+    )
     coach_id = fields.Many2one("res.users", string="Coach", required=True)
     description = fields.Html(string="Description")
