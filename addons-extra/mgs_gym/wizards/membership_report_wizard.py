@@ -1,11 +1,11 @@
-from odoo import models, fields  # type: ignore
+from odoo import models, api, fields  # type: ignore
 from odoo.exceptions import UserError  # type: ignore
 from io import BytesIO
 import xlsxwriter  # type: ignore
 import base64
 
 
-class GymMembership(models.Model):
+class GymMembershipReportWizard(models.TransientModel):
     _name = "mgs_gym.membership_report_wizard"
     _description = "Membership Report Wizard"
 
@@ -33,6 +33,19 @@ class GymMembership(models.Model):
     state_id = fields.Many2one(
         "mgs_gym.membership_state", string="State", domain="[('name', '!=', 'Draft')]"
     )
+
+    @api.model
+    def create(self, vals_list):
+        """Require branch for non-admin users."""
+        user = self.env.user
+        is_admin = user.has_group("base.group_system")
+
+        for vals in vals_list:
+            # If user is not admin and did not select a branch, raise error
+            if not is_admin and not vals.get("branch_id"):
+                raise UserError("You must select a branch to generate this report.")
+
+        return super(GymMembershipReportWizard, self).create(vals_list)
 
     def action_print_report(self):
         domain = [("state", "!=", "Draft")]
