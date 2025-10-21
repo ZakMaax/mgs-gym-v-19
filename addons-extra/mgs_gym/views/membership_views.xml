@@ -8,10 +8,11 @@
                 <field name="partner_id"/>
                 <field name="branch_id"/>
                 <field name="shift_id"/>
+                <field name="service_id"/>                
+                <field name="recurrence_unit"/>
                 <field name="recurrence_product_id" optional="hide"/>
                 <field name="start_date"/>
                 <field name="next_invoice_date"/>
-                <field name="recurrence_unit"/>
                 <field name="amount" />
                 <field name="discount_percent" optional="hide"/>
                 <field name="discounted_amount"/>
