@@ -40,7 +40,7 @@
                                         <t t-esc="rec.shift_id.name"/>
                                     </td>
                                      <td style="text-align:right; padding:6px 8px; border-bottom:1px solid #efefef;">
-                                        <t t-esc="rec.gender"/>
+                                        <t t-esc="rec.branch_id.gender"/>
                                     </td>
                                      <td style="text-align:right; padding:6px 8px; border-bottom:1px solid #efefef;">
                                         <t t-esc="rec.state_id.name"/>
