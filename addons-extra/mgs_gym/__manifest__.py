@@ -13,6 +13,7 @@
     ],
     "license": "GPL-2",
     "data": [
+        "security/groups.xml",
         "security/ir.model.access.csv",
         "security/gym_branch_rules.xml",
         "data/membership_sequence.xml",
