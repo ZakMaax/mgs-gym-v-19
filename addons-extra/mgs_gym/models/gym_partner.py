@@ -9,6 +9,7 @@ class GymPartner(models.Model):
         "mgs_gym.branch",
         string="Branch",
         domain=lambda self: [("id", "in", self.env.user.branch_ids.ids)],
+        default=lambda self: self.env.user.default_branch_id,
     )
     gender = fields.Selection(related="branch_id.gender", store=True, readonly=True)
     company_id = fields.Many2one(
