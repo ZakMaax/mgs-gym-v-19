@@ -8,9 +8,12 @@ class GymMealPlan(models.Model):
     name = fields.Char(readonly=True, compute="_compute_name")
     partner_id = fields.Many2one(
         "res.partner",
-        domain=[("is_gym_member", "=", True)],
-        string="Partner",
         required=True,
+        string="Client",
+        domain=lambda self: [
+            ("branch_id", "in", self.env.user.branch_ids.ids),
+            ("is_gym_member", "=", True),
+        ],
     )
     coach_id = fields.Many2one("res.users", string="Coach", required=True)
     date_from = fields.Date("Date from", required=True)
