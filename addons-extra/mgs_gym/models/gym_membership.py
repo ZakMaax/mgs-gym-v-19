@@ -776,13 +776,46 @@ class GymMembership(models.Model):
         # Update next_invoice_date AFTER this first invoice
         self._update_next_invoice_date(self)
 
-    @api.ondelete(at_uninstall=False)
-    def _unlink_except_active_membership(self):
-        for rec in self:
-            if rec.state == "Active":
+    @api.model
+    def unlink(self):
+        for membership in self:
+            # 1. Check for posted invoices linked to the member (partner_id)
+            posted_invoice_count = self.env["account.move"].search_count(
+                [
+                    ("partner_id", "=", membership.partner_id.id),
+                    ("move_type", "in", ["out_invoice", "out_refund"]),
+                    ("state", "=", "posted"),
+                ]
+            )
+
+            # 2. Raise an error if posted invoices exist
+            if posted_invoice_count > 0:
                 raise UserError(
-                    "You cannot delete an active membership. You need to Cancel it or Reset it to Draft first. Or Archive it instead"
+                    (
+                        "You cannot delete the membership for partner '%s' because there are %d posted invoice(s) linked to this member. Archive it instead."
+                    )
+                    % (membership.partner_id.name, posted_invoice_count)
                 )
+
+        # 3. If no error is raised, proceed with the original deletion
+        return super(GymMembership, self).unlink()
+
+    def write(self, vals):
+        # 1. Check if the 'active' field is being set to False (i.e., archiving)
+        if "active" in vals and vals["active"] is False:
+            for membership in self:
+                # 3. Check the internal status (state) before archiving
+                if membership.state == "Active":
+                    # Raise an error if an 'active' membership is being archived
+                    raise UserError(
+                        (
+                            "You cannot archive the membership '%s' while its status is 'Active'. Please change its status to 'Suspended' or 'Cancelled' first."
+                        )
+                        % (membership.name or membership.id)
+                    )
+
+        # 4. If no error is raised, proceed with the original write operation
+        return super(GymMembership, self).write(vals)
 
     def action_print_receipt(self):
         self.ensure_one()
