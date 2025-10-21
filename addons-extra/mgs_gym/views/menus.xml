@@ -99,66 +99,73 @@
         action="action_mgs_gym_sales" 
         sequence="8"
     />
-    <!-- configuration menu -->
+ 
+  <!-- The configuration menu (visible to Admin AND Branch Manager) -->
+        <menuitem
+            id="mgs_gym_configuration_menu"
+            name="Configuration"
+            parent="root_mgs_gym_menu"
+            sequence="9"
+            groups="base.group_system,mgs_gym.group_mgs_gym_branch_manager"
+        />
 
-    <menuitem
-        id="mgs_gym_configuration_menu"
-        name="Configuration"
-        parent="root_mgs_gym_menu"
-        sequence="9"
-        groups="base.group_system"
-    />
+        <!-- Branch menu (Admin ONLY) -->
+        <menuitem
+            id="mgs_gym_branch_menu"
+            name="Branch"
+            parent="mgs_gym_configuration_menu"
+            sequence="1"
+            action="action_mgs_gym_branch"
+            groups="base.group_system"
+        />
 
-    <!-- Branch menu (inside configuration) -->
+        <!-- Shift menu (Admin AND Branch Manager) -->
+        <menuitem
+            id="mgs_gym_shift_menu"
+            name="Shift"
+            parent="mgs_gym_configuration_menu"
+            sequence="2"
+            action="action_mgs_gym_shift"
+            groups="base.group_system,mgs_gym.group_mgs_gym_branch_manager"
+        />
 
-    <menuitem
-        id="mgs_gym_branch_menu"
-        name="Branch"
-        parent="mgs_gym_configuration_menu"
-        sequence="1"
-        action="action_mgs_gym_branch"
-    />
+        <!-- Class menu (Admin AND Branch Manager) -->
+        <menuitem
+            id="mgs_gym_class_menu"
+            name="Class"
+            parent="mgs_gym_configuration_menu"
+            sequence="3"
+            action="action_mgs_gym_class"
+            groups="base.group_system,mgs_gym.group_mgs_gym_branch_manager"
+        />
 
-    <!-- Shift menu (inside configuration) -->
-    <menuitem
-        id="mgs_gym_shift_menu"
-        name="Shift"
-        parent="mgs_gym_configuration_menu"
-        sequence="2"
-        action="action_mgs_gym_shift"
-    />
+        <!-- Services header (Admin ONLY) -->
+        <menuitem
+            id="mgs_gym_services_header"
+            name="Products &amp; Services"
+            parent="mgs_gym_configuration_menu"
+            sequence="4"
+            groups="base.group_system"
+        />
 
-     <menuitem
-        id="mgs_gym_class_menu"
-        name="Class"
-        parent="mgs_gym_configuration_menu"
-        sequence="3"
-        action="action_mgs_gym_class"
-    />
+        <!-- Product Template menu (Admin ONLY) -->
+        <menuitem
+            id="mgs_gym_service_menu"
+            name="Product Template"
+            parent="mgs_gym_services_header"
+            sequence="1"
+            action="action_mgs_gym_product_service"
+            groups="base.group_system"
+        />
 
-    <!-- Service configuration -->
-    <!-- Services header (non-clickable) -->
-    <menuitem
-        id="mgs_gym_services_header"
-        name="Products &amp; Services"
-        parent="mgs_gym_configuration_menu"
-        sequence="4"
-    />
-
-    <menuitem
-        id="mgs_gym_service_menu"
-        name="Product Template"
-        parent="mgs_gym_services_header"
-        sequence="1"
-        action="action_mgs_gym_product_service"
-    />
-
-    <menuitem
-        id="mgs_gym_membership_service_menu"
-        name="Product Attributes"
-        parent="mgs_gym_services_header"
-        sequence="2"
-        action="action_mgs_gym_product_attribute"
-    />
+        <!-- Product Attributes menu (Admin ONLY) -->
+        <menuitem
+            id="mgs_gym_membership_service_menu"
+            name="Product Attributes"
+            parent="mgs_gym_services_header"
+            sequence="2"
+            action="action_mgs_gym_product_attribute"
+            groups="base.group_system"
+        />
 
 </odoo>
