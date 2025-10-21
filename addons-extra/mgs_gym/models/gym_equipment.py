@@ -8,7 +8,11 @@ class GymEquipment(models.Model):
     name = fields.Char(string="Name", required=True)
     reference = fields.Char(string="Reference", readonly=True)
     image_1920 = fields.Image(string="Image")
-    branch_id = fields.Many2one("mgs_gym.branch", string="Branch")
+    branch_id = fields.Many2one(
+        "mgs_gym.branch",
+        string="Branch",
+        domain=lambda self: [("id", "in", self.env.user.branch_ids.ids)],
+    )
     company_id = fields.Many2one(
         "res.company", string="Company", default=lambda self: self.env.company
     )
