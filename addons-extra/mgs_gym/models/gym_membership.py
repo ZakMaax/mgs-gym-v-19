@@ -782,7 +782,6 @@ class GymMembership(models.Model):
         # Update next_invoice_date AFTER this first invoice
         self._update_next_invoice_date(self)
 
-    @api.model
     def unlink(self):
         for membership in self:
             # 1. Check for posted invoices linked to the member (partner_id)
