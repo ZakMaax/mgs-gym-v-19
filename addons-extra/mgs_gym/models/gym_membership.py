@@ -10,6 +10,7 @@ class GymMembership(models.Model):
     _name = "mgs_gym.membership"
     _description = "Gym Membership"
     _inherit = ["mail.activity.mixin", "mail.tracking.duration.mixin"]
+    _order = "create_date desc"
 
     _track_duration_field = "state_id"
 
@@ -62,7 +63,7 @@ class GymMembership(models.Model):
     service_id = fields.Many2one(
         "product.template",
         domain="[('type', '=', 'service')]",
-        string="Base Service Product",
+        string="Membership Service",
         required=True,
     )
 
@@ -135,7 +136,9 @@ class GymMembership(models.Model):
         copy=False,
         ondelete="restrict",
     )
-    state = fields.Char(related="state_id.name", string="State", store=True)
+    state = fields.Char(
+        related="state_id.name", string="State", store=True, translate=True
+    )
 
     can_renew = fields.Boolean(
         string="Can Renew",
