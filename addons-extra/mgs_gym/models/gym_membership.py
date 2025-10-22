@@ -19,7 +19,10 @@ class GymMembership(models.Model):
         "res.partner",
         required=True,
         string="Client",
-        domain=[("is_gym_member", "=", True)],
+        domain=lambda self: [
+            ("branch_id", "in", self.env.user.branch_ids.ids),
+            ("is_gym_member", "=", True),
+        ],
     )
     branch_id = fields.Many2one(
         related="partner_id.branch_id", string="Branch", store=True, readonly=True
