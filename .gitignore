@@ -11,4 +11,4 @@ addons-extra/muk_web_group/
 addons-extra/muk_web_refresh/
 addons-extra/muk_web_theme/
 addons-extra/mgs_sale/
-etc/
+etc/*
