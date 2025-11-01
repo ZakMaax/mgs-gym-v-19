@@ -105,15 +105,36 @@
             id="mgs_gym_configuration_menu"
             name="Configuration"
             parent="root_mgs_gym_menu"
-            sequence="9"
+            sequence="99"
             groups="base.group_system,mgs_gym.group_mgs_gym_branch_manager"
         />
 
+        <!-- Settings menu (ADMIN ONLY) -->
+        <menuitem
+            id="mgs_gym_system_config"
+            name="Settings"
+            parent="mgs_gym_configuration_menu"
+            sequence="1"
+            groups="base.group_system"
+            action="mgs_gym_res_config_settings_action"
+        />
+
+        <!-- GYM Configuration -->
+
+        <menuitem
+            id="mgs_gym_config_menu"
+            name="GYM Configuration"
+            parent="mgs_gym_configuration_menu"
+            sequence="2"
+            groups="base.group_system,mgs_gym.group_mgs_gym_branch_manager"
+        />
+
+        
         <!-- Branch menu (Admin ONLY) -->
         <menuitem
             id="mgs_gym_branch_menu"
             name="Branch"
-            parent="mgs_gym_configuration_menu"
+            parent="mgs_gym_config_menu"
             sequence="1"
             action="action_mgs_gym_branch"
             groups="base.group_system"
@@ -123,7 +144,7 @@
         <menuitem
             id="mgs_gym_shift_menu"
             name="Shift"
-            parent="mgs_gym_configuration_menu"
+            parent="mgs_gym_config_menu"
             sequence="2"
             action="action_mgs_gym_shift"
             groups="base.group_system,mgs_gym.group_mgs_gym_branch_manager"
@@ -133,7 +154,7 @@
         <menuitem
             id="mgs_gym_class_menu"
             name="Class"
-            parent="mgs_gym_configuration_menu"
+            parent="mgs_gym_config_menu"
             sequence="3"
             action="action_mgs_gym_class"
             groups="base.group_system,mgs_gym.group_mgs_gym_branch_manager"
