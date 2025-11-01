@@ -8,3 +8,4 @@ from . import gym_membership
 from . import gym_measurement
 from . import gym_meal_plan
 from . import gym_equipment
+from . import res_config_settings
