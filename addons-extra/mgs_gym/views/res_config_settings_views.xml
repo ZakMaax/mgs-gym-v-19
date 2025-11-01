@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.mgs_gym</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="10"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+           <xpath expr="//form" position="inside">
+                <app data-string="Baazi GYM" string="Baazi GYM" name="mgs_gym" groups="base.group_system">
+                    <block title="SMS Gateway Settings" name="sms_gateway_settings">
+                        <!-- Connection Settings -->
+                        <setting string="Connection Settings" id="sms_connection_settings" help="Connection Settings, SMS API Provider URL, Sender Name or ID.">
+                            <div class="content-group">
+                               <div class="mt-16">
+                                    <div>
+                                        <label for="sms_api_url" string="API URL" class="col-2 o_light_label"/>
+                                        <field name="sms_api_url"/>
+                                    </div>
+                                    <div class="mt-16">
+                                        <label for="sms_sender_id" string="Sender ID" class="col-2 o_light_label"/>
+                                        <field name="sms_sender_id"/>
+                                    </div>
+                               </div>
+                            </div>
+                        </setting>
+
+                        <!-- Authentication -->
+                        <setting string="Authentication" id="sms_auth_settings" help="SMS Gateway Authentication Params: Username, Password, Secret Key.">
+                             <div class="content-group">
+                               <div class="mt-16">
+                                    <div>
+                                        <label for="sms_username" string="Username" class="col-2 o_light_label"/>
+                                        <field name="sms_username" password="True"/>
+                                    </div>
+                                    <div class="mt-16">
+                                        <label for="sms_password" string="Password" class="col-2 o_light_label"/>
+                                        <field name="sms_password" password="True"/>
+                                    </div>
+                                     <div class="mt-16">
+                                        <label for="sms_api_secret" string="Secret API Key" class="col-2 o_light_label"/>
+                                        <field name="sms_api_secret" password="True"/>
+                                    </div>
+                               </div>
+                            </div>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>
