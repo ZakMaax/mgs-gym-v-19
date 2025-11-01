@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
+access_mgs_sms_gateway_template,access.mgs_sms_gateway.template,mgs_sms_gateway.model_mgs_sms_gateway_template,,1,1,1,1
+access_mgs_sms_gateway_telesom,access.mgs_sms_gateway.telesom,mgs_sms_gateway.model_mgs_sms_gateway_telesom,,1,1,1,1
