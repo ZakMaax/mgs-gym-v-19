@@ -1,3 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_mgs_sale_sale_report,access.mgs_sale.sale_report,mgs_sale.model_mgs_sale_sale_report,,1,1,1,1
-access_mgs_sale_sale_report_view,access.mgs_sale.sale_report_view,mgs_sale.model_mgs_sale_combined_report,,1,1,1,1
