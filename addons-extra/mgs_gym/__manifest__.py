@@ -30,6 +30,7 @@
         "views/meal_plan_views.xml",
         "views/measurement_report_wizard_views.xml",
         "views/membership_report_wizard_views.xml",
+        "views/res_config_settings_views.xml",
         "views/equipment_views.xml",
         "reports/paper_format.xml",
         "reports/report_actions.xml",
