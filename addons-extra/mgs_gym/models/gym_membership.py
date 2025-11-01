@@ -356,6 +356,7 @@ class GymMembership(models.Model):
                 membership.message_post(
                     body=f"Membership {membership.name} {'reactivated' if was_refunded else 'activated'} and new invoice generated."
                 )
+                membership.action_send_membership_activation_sms()
             else:
                 membership.message_post(
                     body=f"Membership {membership.name} activated without new invoice (existing invoice found)."
@@ -571,7 +572,7 @@ class GymMembership(models.Model):
                 )
                 vals = {
                     "res_model_id": model.id,
-                    "res_id": member.id,  # REQUIRED when res_model set
+                    "res_id": member.id,
                     "activity_type_id": activity_type.id,
                     "summary": f"Membership for {member.partner_id.name} will expire soon",
                     "note": (
@@ -633,6 +634,7 @@ class GymMembership(models.Model):
         )
         if due_members:
             due_members.write({"state_id": expired_state.id})
+            due_members.action_send_membership_expiry_sms()
 
     def action_renew(self):
         """Renew an expired membership."""
@@ -695,6 +697,7 @@ class GymMembership(models.Model):
             )
             old_reminders.write({"state": "done"})
             membership.write({"refunded": False})
+            membership.action_send_membership_activation_sms()
 
     def _update_next_invoice_date(self, membership):
         """Update next_invoice_date starting from the latest of today or old next_invoice_date."""
@@ -724,26 +727,29 @@ class GymMembership(models.Model):
         membership.write({"next_invoice_date": next_date})
 
     def _register_payment(self, invoice):
-        """Automatically pay the invoice in the selected journal."""
+        """Automatically pay and reconcile the invoice in the selected journal."""
         if not self.payment_journal_id:
             raise UserError("Please select a Payment Journal for automatic payment.")
 
-        payment_method = self.env.ref(
-            "account.account_payment_method_manual_in", raise_if_not_found=False
-        ) or self.env.ref("account.account_payment_method_manual_out")
+        # Prepare the payment register wizard
+        payment_register = (
+            self.env["account.payment.register"]
+            .with_context(active_model="account.move", active_ids=invoice.ids)
+            .create(
+                {
+                    "payment_date": fields.Date.today(),
+                    "journal_id": self.payment_journal_id.id,
+                    "payment_type": "inbound",
+                }
+            )
+        )
 
-        payment_vals = {
-            "payment_type": "inbound",
-            "partner_type": "customer",
-            "partner_id": invoice.partner_id.id,
-            "amount": invoice.amount_total,
-            "journal_id": self.payment_journal_id.id,
-            "payment_method_id": payment_method.id if payment_method else False,
-            "date": fields.Date.today(),
-            "memo": invoice.name,
-        }
-        payment = self.env["account.payment"].create(payment_vals)
-        payment.action_post()
+        # Execute payment creation and reconciliation
+        payment_register.action_create_payments()
+
+        _logger.info(
+            f"Invoice {invoice.name} automatically paid via journal {self.payment_journal_id.display_name}."
+        )
 
     def _generate_invoice(self):
         """Generate invoice upon membership activation."""
@@ -827,3 +833,134 @@ class GymMembership(models.Model):
         return self.env.ref(
             "mgs_gym.action_report_gym_membership_receipt"
         ).report_action(self)
+
+    def action_send_membership_expiry_sms(self):
+        """
+        Send SMS notification when membership expires.
+        This can be called manually or via automated action/cron.
+        """
+        template = self.env["mgs_sms_gateway.template"].search(
+            [
+                ("model_id.model", "=", "mgs_gym.membership"),
+                ("usage", "=", "expiration"),
+            ],
+            limit=1,
+        )
+
+        if not template:
+            return {
+                "type": "ir.actions.client",
+                "tag": "display_notification",
+                "params": {
+                    "title": "SMS Error",
+                    "message": "Membership expiry SMS template not found. Please create one with usage 'membership_expiry'.",
+                    "sticky": False,
+                    "type": "warning",
+                },
+            }
+
+        sent_count = 0
+        for membership in self:
+            partner = membership.partner_id
+            mobile = partner.phone
+
+            if not mobile:
+                partner.message_post(
+                    body="Membership expiry SMS skipped: Mobile number missing.",
+                    subject="Membership Expiry SMS Skipped",
+                    message_type="notification",
+                    subtype_xmlid="mail.mt_note",
+                )
+                continue
+
+            # Render the message using the partner record
+            rendered_message = self.env["mgs_sms_gateway.template"].render_template(
+                template.id, membership
+            )
+
+            partner._queue_sms_message(mobile, rendered_message, partner)
+            sent_count += 1
+
+            # Log the action in chatter
+            partner.message_post(
+                body=f"Membership expiry SMS sent to {mobile}.",
+                subject="Membership Expiry Notification Sent",
+                message_type="notification",
+                subtype_xmlid="mail.mt_note",
+            )
+
+        return {
+            "type": "ir.actions.client",
+            "tag": "display_notification",
+            "params": {
+                "title": "Membership Expiry SMS",
+                "message": f"{sent_count} membership expiry notifications queued successfully.",
+                "sticky": False,
+                "type": "success",
+            },
+        }
+
+    def action_send_membership_activation_sms(self):
+        """
+        Send SMS notification when membership is activated.
+        """
+        template = self.env["mgs_sms_gateway.template"].search(
+            [
+                ("model_id.model", "=", "mgs_gym.membership"),
+                ("usage", "=", "activation"),
+            ],
+            limit=1,
+        )
+
+        if not template:
+            return {
+                "type": "ir.actions.client",
+                "tag": "display_notification",
+                "params": {
+                    "title": "SMS Error",
+                    "message": "Membership activation SMS template not found.",
+                    "sticky": False,
+                    "type": "warning",
+                },
+            }
+
+        sent_count = 0
+        for membership in self:
+            partner = membership.partner_id
+            mobile = partner.phone
+
+            if not mobile:
+                partner.message_post(
+                    body="Membership activation SMS skipped: Mobile number missing.",
+                    subject="Membership Activation SMS Skipped",
+                    message_type="notification",
+                    subtype_xmlid="mail.mt_note",
+                )
+                continue
+
+            # Render the message
+            rendered_message = self.env["mgs_sms_gateway.template"].render_template(
+                template.id, membership
+            )
+
+            # Use the existing method from res.partner
+            partner._queue_sms_message(mobile, rendered_message, partner)
+            sent_count += 1
+
+            membership.message_post(
+                body=f"Membership activation SMS sent to {partner.name} ({mobile}).",
+                subject="Membership Activation Notification Sent",
+                message_type="notification",
+                subtype_xmlid="mail.mt_note",
+            )
+
+        return {
+            "type": "ir.actions.client",
+            "tag": "display_notification",
+            "params": {
+                "title": "Membership Activation SMS",
+                "message": f"{sent_count} membership activation notifications queued successfully.",
+                "sticky": False,
+                "type": "success",
+            },
+        }
